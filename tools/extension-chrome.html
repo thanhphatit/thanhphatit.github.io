@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Extension Chrome</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+header {
+  background-color: #33CCFF;
+  padding: 1px;
+  text-align: center;
+  font-size: 18px;
+  color: white;
+}
+footer{
+	background-color: #33CCFF;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	text-align: center;
+	font-size: 18px;
+}
+/* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
+@media (max-width: 600px) {
+  section {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+}
+.formdownload{
+text-align:center;
+} 
+.box img{
+    margin:auto;
+    position:absolute;
+    top:0; left:0; right:0; bottom:0;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Download Extension Chrome</h1>
+</header>
+<br>
+<a href="http://it-makeapp/guide.html">Guide</a>
+<div class="formdownload">
+ID: <input type="text" id="IDExtension" value="">
+Version: <input type="text" id="VersionChrome" value="">
+<button onclick="GetExtension()">Download Extension</button>
+<h1><p id="Notification"></p></h1>
+</div>
+<div class="box">
+    <a href="http://sutrixgroup.com/solutions.html"><img src="https://3.bp.blogspot.com/-eACyJiCs0BU/XOYYu9aM7bI/AAAAAAAABWs/q-U41VR61mgeGiIOduySkMnMdlpsQI9BwCLcBGAs/s1600/SutrixSolutions.png" alt="Sutrix Solutions" width="1100" height="400"></a>
+</div>
+<script>
+function GetExtension() {
+  var IDETS = document.getElementById("IDExtension").value;
+  var VerSChrome = document.getElementById("VersionChrome").value;
+  if(IDETS=="" || VerSChrome=="")
+  {
+	document.getElementById("Notification").innerHTML="EMPTY"
+  }
+  else
+  {
+	window.location='https://clients2.google.com/service/update2/crx?response=redirect&prodversion='+VerSChrome+'&acceptformat=crx2,crx3&x=id%3D'+IDETS+'%26uc'
+  }
+}
+</script>
+<br>
+<footer>
+  <!-- <h1>Sutrix Solutions</h1> -->
+  <p>Copyringt@2019 ThanhPhatIT</p>
+</footer>
+</body>
+</html>
