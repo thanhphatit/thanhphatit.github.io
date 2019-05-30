@@ -135,6 +135,20 @@ footer {
       <li><button class="btn btn-warning btn-lg" onclick="openCity(event, 'tab3')" style="width:90%">#</button></li>
 	  <br>
 	  <li><button class="btn btn-danger btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-info btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-success btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-primary btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-warning btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-danger btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-info btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <br>
+	  <li><button class="btn btn-success btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
     </ul>
   </nav>
   
@@ -143,8 +157,7 @@ footer {
 		<h3>Extension For Chrome</h3>
 		<b>ID Extension:</b><br><input type="text" name="googlepdfurl" style="width:100%" id="IDExtension"><br/>
 		<b>Version Chrome:</b><br><input type="text" name="bloggerpdfurl" style="width:100%" id="VersionChrome">
-		<br/>
-		<h1><p id="Notification"></p></h1>
+		<br/><br>
 		<button type="button" class="btn btn-success btn-lg" style="text-align:center" onclick="GetExtension()">DOWNLOAD</button>
 		<span><button type="button" class="btn btn-success btn-lg" style="text-align:center"><a href="guide-extens-chrome.html">GUIDE</a></button></span>
 	</div>
@@ -154,8 +167,9 @@ footer {
 		<b>Version NodeJS:</b><br><input type="text" name="imageurl" style="width:100%" id="VersionNodeJS"><br/>
 		<br/>
 		<button type="button" class="btn btn-success btn-lg" style="text-align:center" onclick="ShowNodeJS()">SHOW</button>
-		<!-- <iframe id="shownodejs"></iframe> -->
-		<p id="shownodejs"></p>
+		<br>
+		<br>
+		<iframe height="550px" width="100%" src="" id="showversionnodejs"></iframe>
 	</div>
 
 	<div id="tab3" class="tabcontent">
@@ -182,7 +196,6 @@ footer {
   <p>Copyright @ <script>document.write(new Date().getFullYear())</script> by ThanhPhat IT</p>
 </footer>
 <script>
-document.getElementById("shownodejs").addEventListener("change", mygooglepdf);
 function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -201,7 +214,7 @@ function GetExtension() {
   var VerSChrome = document.getElementById("VersionChrome").value;
   if(IDETS=="" || VerSChrome=="")
   {
-	document.getElementById("Notification").innerHTML="EMPTY"
+	alert("EMPTY");
   }
   else
   {
@@ -216,7 +229,7 @@ function ShowNodeJS() {
   }
   else
   {
-	document.getElementById("shownodejs")='<iframe src="https://deb.nodesource.com/node_'+VersionNode+'.x/pool/main/n/nodejs/" ></iframe>'
+	document.getElementById("showversionnodejs").src='https://deb.nodesource.com/node_'+VersionNode+'.x/pool/main/n/nodejs/';
   }
 }
 </script>
