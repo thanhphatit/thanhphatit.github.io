@@ -213,6 +213,13 @@ body {
   </nav>
   
   <article>
+	<div id="hide">
+		<h3>Giới Thiệu</h3>
+		<p>Thành Phát IT</p>
+		<p>Facebook: https://www.facebook.com/thanhphatit</p>
+		<p>Blog: https://www.itblognote.com/</p>
+	</div>
+	
 	<div id="tab1" class="tabcontent">
 		<h3>Extension For Chrome</h3>
 		<b>ID Extension:</b><br><input type="text" name="googlepdfurl" style="width:100%" id="IDExtension"><br/>
@@ -259,6 +266,7 @@ body {
 function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
+  hide.style.display="none";
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
   }
