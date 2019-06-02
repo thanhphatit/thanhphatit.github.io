@@ -196,23 +196,30 @@ body {
 	  <br>
 	  <li><button class="btn btn-danger btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-info btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-info btn-lg" onclick="openCity(event, 'tab5')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-success btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-success btn-lg" onclick="openCity(event, 'tab6')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-primary btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-primary btn-lg" onclick="openCity(event, 'tab7')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-warning btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-warning btn-lg" onclick="openCity(event, 'tab8')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-danger btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-danger btn-lg" onclick="openCity(event, 'tab9')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-info btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-info btn-lg" onclick="openCity(event, 'tab10')" style="width:90%">#</button></li>
 	  <br>
-	  <li><button class="btn btn-success btn-lg" onclick="openCity(event, 'tab4')" style="width:90%">#</button></li>
+	  <li><button class="btn btn-success btn-lg" onclick="openCity(event, 'tab11')" style="width:90%">#</button></li>
     </ul>
   </nav>
   
   <article>
+	<div id="hide">
+		<h3>Giới Thiệu</h3>
+		<p>Thành Phát IT</p>
+		<p>Facebook: <a href="https://www.facebook.com/thanhphatit">Link</a></p>
+		<p>Blog: <a href="https://www.itblognote.com/">Link</a></p>
+	</div>
+	
 	<div id="tab1" class="tabcontent">
 		<h3>Extension For Chrome</h3>
 		<b>ID Extension:</b><br><input type="text" name="googlepdfurl" style="width:100%" id="IDExtension"><br/>
@@ -259,6 +266,7 @@ body {
 function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
+  hide.style.display="none";
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
   }
@@ -274,7 +282,7 @@ function GetExtension() {
   var VerSChrome = document.getElementById("VersionChrome").value;
   if(IDETS=="" || VerSChrome=="")
   {
-	alert("EMPTY");
+	alert("Textbox is empty");
   }
   else
   {
@@ -285,7 +293,7 @@ function ShowNodeJS() {
   var VersionNode = document.getElementById("VersionNodeJS").value;
   if(VersionNode=="")
   {
-	alert("EMPTY");
+	alert("Textbox is empty");
   }
   else
   {
