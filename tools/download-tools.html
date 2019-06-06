@@ -241,7 +241,9 @@ body {
 
 	<div id="tab3" class="tabcontent">
 		<h3>ImageMagick Source</h3>
-		<iframe height="550px" width="100%" src="https://imagemagick.org/download/" id="showversionnodejs"></iframe>
+		<iframe height="550px" width="100%" src="https://imagemagick.org/download/" id="showimagemagick"></iframe>
+		<br>
+		<button type="button" class="btn btn-success btn-lg" style="text-align:center" onclick="ShowImageMagicK()">Delegates</button>
 	</div>
 	
 	<div id="tab4" class="tabcontent">
@@ -358,6 +360,9 @@ function ShowNodeJS() {
   {
 	document.getElementById("showversionnodejs").src='https://deb.nodesource.com/node_'+VersionNode+'.x/pool/main/n/nodejs/';
   }
+}
+function ShowImageMagicK() {
+  document.getElementById("showimagemagick").src='https://www.imagemagick.org/download/delegates/';
 }
 </script>
 </body>
