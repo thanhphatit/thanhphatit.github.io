@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
+
+</body>
+</html>
+<div class="row">
+            <h3><b>Generate a Password by Name</b></h3>
+			<a>Name:</a>
+			<input type="text" id="username" style="width:100%">
+			<a>Password:</a>
+			<input type="text" id="passname" style="width:100%">
+			<br/><br>
+			<input type="button" value="COPY" class="btn btn-success" onclick="exportpassword()">
+</div>	
+<script type="text/javascript">
+	function exportpassword() {
+		var str = document.getElementById("username").value; 
+		var res = str.replace("a", "@");
+		var res1 = res.replace("b", "B");
+		var res2 = res1.replace("c", "(");
+		var res3 = res2.replace("d", "D");
+		var res4 = res3.replace("e", "3");
+		var res5 = res4.replace("g", "9");
+		var res6 = res5.replace("h", "#");
+		var res7 = res6.replace("i", "1");
+		var res8 = res7.replace("k", "K");
+		var res9 = res8.replace("l", "!");
+		var res10 = res9.replace("m", "M");
+		var res11 = res10.replace("n", "N");
+		var res12 = res11.replace("o", "0");
+		var res13 = res12.replace("q", "Q");
+		var res14 = res13.replace("p", "P");
+		var res15 = res14.replace("r", "R");
+		var res16 = res15.replace("t", "7");
+		var res17 = res16.replace("s", "$");
+		var res18 = res17.replace("u", "U");
+		var res19 = res18.replace("v", "V");
+		var res20 = res19.replace("w", "VV");
+		var res21 = res20.replace("y", "Y");
+		var res22 = res21.replace("f", "F");
+		var res23 = res22.replace("j", "/");
+		var res24 = res23.replace("z", "Z");
+		var res25 = res24.replace("x", "X");
+		var res26 = res25.replace(".", "*");
+		document.getElementById("passname").value = res26;
+		var copyText = document.getElementById("passname");
+		copyText.select();
+		document.execCommand("copy");
+		}
+	</script>
+
+
+
+
+
+
+
+
+
