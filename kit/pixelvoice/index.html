@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelVoice Ultimate - Auto ZIP Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --g0: #00ff88;
+            --g1: #00cc66;
+            --g2: #009944;
+            --g-dim: rgba(0,255,136,0.12);
+            --g-glow: rgba(0,255,136,0.35);
+            --cyan: #00e5ff;
+            --red: #ff3366;
+            --bg: #050d0a;
+            --bg2: #070f0c;
+            --panel: rgba(0,20,12,0.82);
+            --border: rgba(0,255,136,0.15);
+            --text: #c8ffe8;
+            --text-dim: #4d8c6a;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 15px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── SCANLINES OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.18) 2px,
+                rgba(0,0,0,0.18) 4px
+            );
+        }
+
+        /* ── ANIMATED BG GRID ── */
+        body::after {
+            content: '';
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            animation: gridDrift 30s linear infinite;
+        }
+        @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 48px 48px; } }
+
+        /* ── CORNER GLOW BLOBS ── */
+        .bg-blob {
+            position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0;
+        }
+        .blob-tl { width: 500px; height: 500px; top: -150px; left: -150px; background: radial-gradient(circle, rgba(0,255,136,0.07) 0%, transparent 70%); }
+        .blob-br { width: 600px; height: 600px; bottom: -200px; right: -200px; background: radial-gradient(circle, rgba(0,229,255,0.05) 0%, transparent 70%); }
+        .blob-mid { width: 400px; height: 400px; top: 40%; left: 50%; transform: translate(-50%,-50%); background: radial-gradient(circle, rgba(0,255,136,0.03) 0%, transparent 70%); }
+
+        /* ── LAYOUT ── */
+        .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        /* ── HEADER ── */
+        .header { text-align: center; margin-bottom: 3rem; position: relative; }
+        .header-badge {
+            display: inline-block; font-family: 'Share Tech Mono', monospace; font-size: 11px;
+            letter-spacing: 3px; color: var(--g0); border: 1px solid var(--g0);
+            padding: 3px 14px; border-radius: 2px; margin-bottom: 1.2rem;
+            animation: blink 2.5s step-start infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: clamp(2.4rem, 6vw, 4.5rem);
+            letter-spacing: -1px;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--g0) 0%, var(--cyan) 50%, var(--g0) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+            text-shadow: none;
+            margin-bottom: 0.5rem;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .logo-sub {
+            font-family: 'Share Tech Mono', monospace; font-size: 11px;
+            color: var(--text-dim); letter-spacing: 6px; text-transform: uppercase;
+        }
+
+        /* ── GRID ── */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media(min-width: 900px) { .grid { grid-template-columns: 280px 1fr 1fr; } }
+
+        /* ── PANEL ── */
+        .panel {
+            background: var(--panel);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .panel:hover { border-color: rgba(0,255,136,0.3); }
+        .panel::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--g0), transparent);
+        }
+        .panel-inner { padding: 1.8rem; }
+
+        /* corner accents */
+        .panel::after {
+            content: '';
+            position: absolute; bottom: 0; right: 0;
+            width: 20px; height: 20px;
+            border-bottom: 2px solid var(--g0); border-right: 2px solid var(--g0);
+            opacity: 0.4;
+        }
+
+        /* ── SECTION TITLE ── */
+        .sec-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem; font-weight: 700;
+            color: var(--g0);
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 1.4rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .sec-title .num {
+            width: 26px; height: 26px; border: 1px solid var(--g0); border-radius: 2px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: var(--g0); flex-shrink: 0;
+        }
+        .sec-title.cyan { color: var(--cyan); }
+        .sec-title.cyan .num { border-color: var(--cyan); color: var(--cyan); }
+        .sec-title.cyan::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+
+        /* ── FIELD LABEL ── */
+        .field-label {
+            font-family: 'Share Tech Mono', monospace; font-size: 11px;
+            letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .field-label span { color: var(--red); }
+
+        /* ── FIELD BOX ── */
+        .field-box {
+            background: rgba(0,255,136,0.03); border: 1px solid rgba(0,255,136,0.1);
+            border-radius: 2px; padding: 1rem; margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+        .field-box:hover { border-color: rgba(0,255,136,0.2); }
+
+        /* ── FILE INPUT ── */
+        input[type=file] {
+            width: 100%; font-size: 12px; font-family: 'Share Tech Mono', monospace;
+            color: var(--text-dim); cursor: pointer;
+        }
+        input[type=file]::file-selector-button {
+            background: rgba(0,255,136,0.1); color: var(--g0);
+            border: 1px solid rgba(0,255,136,0.3); border-radius: 2px;
+            padding: 4px 12px; font-size: 11px; font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 1px; cursor: pointer; margin-right: 10px;
+            transition: all 0.2s;
+        }
+        input[type=file]::file-selector-button:hover { background: rgba(0,255,136,0.2); }
+
+        /* ── TEXT INPUT ── */
+        input[type=text] {
+            width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,136,0.15);
+            border-radius: 2px; padding: 9px 12px; font-size: 13px;
+            font-family: 'Share Tech Mono', monospace; color: var(--text);
+            outline: none; transition: border-color 0.3s;
+        }
+        input[type=text]:focus { border-color: var(--g0); box-shadow: 0 0 0 2px rgba(0,255,136,0.08); }
+        input[type=text]::placeholder { color: var(--text-dim); }
+
+        /* ── CHECKBOX ── */
+        .check-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .check-row input[type=checkbox] {
+            width: 14px; height: 14px; accent-color: var(--g0); cursor: pointer;
+        }
+        .check-row span { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); }
+
+        /* ── BUTTONS ── */
+        .btn {
+            width: 100%; padding: 13px; font-family: 'Orbitron', monospace;
+            font-size: 12px; font-weight: 700; letter-spacing: 2px;
+            border: none; border-radius: 2px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s; position: relative; overflow: hidden;
+        }
+        .btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+            transform: translateX(-100%); transition: transform 0.4s;
+        }
+        .btn:hover::before { transform: translateX(100%); }
+        .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .btn:disabled::before { display: none; }
+
+        .btn-green {
+            background: linear-gradient(135deg, #004d28, #006633);
+            color: var(--g0); border: 1px solid rgba(0,255,136,0.3);
+            box-shadow: 0 0 20px rgba(0,255,136,0.1), inset 0 1px 0 rgba(0,255,136,0.1);
+        }
+        .btn-green:hover:not(:disabled) {
+            background: linear-gradient(135deg, #006633, #008844);
+            box-shadow: 0 0 30px rgba(0,255,136,0.25);
+        }
+        .btn-cyan {
+            background: linear-gradient(135deg, #002a33, #004455);
+            color: var(--cyan); border: 1px solid rgba(0,229,255,0.3);
+            box-shadow: 0 0 20px rgba(0,229,255,0.1);
+        }
+        .btn-cyan:hover:not(:disabled) { box-shadow: 0 0 30px rgba(0,229,255,0.25); }
+
+        .btn-sm {
+            padding: 8px 16px; width: auto; font-size: 11px;
+        }
+
+        .btn-row { display: flex; gap: 10px; }
+        .btn-row .btn { flex: 1; }
+
+        .btn-rec {
+            background: rgba(255,51,102,0.1); color: var(--red);
+            border: 1px solid rgba(255,51,102,0.3);
+        }
+        .btn-rec:hover:not(:disabled) { background: rgba(255,51,102,0.22); }
+        .btn-rec.recording { background: rgba(255,51,102,0.22); animation: recPulse 1s ease-in-out infinite; }
+        @keyframes recPulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,51,102,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,51,102,0)} }
+
+        .btn-stop { background: rgba(0,0,0,0.4); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.07); }
+        .btn-stop:not(:disabled):hover { background: rgba(255,51,102,0.1); color: var(--red); }
+
+        /* ── DIVIDER ── */
+        .divider {
+            display: flex; align-items: center; gap: 12px; margin: 1rem 0;
+        }
+        .divider::before, .divider::after {
+            content: ''; flex: 1; height: 1px; background: rgba(0,255,136,0.1);
+        }
+        .divider span { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 3px; }
+
+        /* ── REC TIMER ── */
+        .rec-timer {
+            display: none; align-items: center; gap: 8px;
+            background: rgba(255,51,102,0.08); border: 1px solid rgba(255,51,102,0.25);
+            border-radius: 2px; padding: 4px 10px; font-family: 'Share Tech Mono', monospace;
+            font-size: 12px; color: var(--red);
+        }
+        .rec-timer .dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: blink 1s step-start infinite; flex-shrink: 0; }
+        .rec-timer.show { display: flex; }
+
+        /* ── AUDIO / IMG PREVIEW ── */
+        audio { width: 100%; height: 32px; outline: none; margin-top: 10px; filter: sepia(1) hue-rotate(100deg) brightness(0.8) saturate(3); }
+        .img-preview { margin-top: 10px; border-radius: 2px; max-height: 120px; width: 100%; object-fit: cover; border: 1px solid var(--border); display: none; }
+
+        /* ── DOWNLOAD SECTION ── */
+        .dl-section {
+            display: none; border: 1px solid rgba(0,255,136,0.25);
+            border-radius: 2px; padding: 1rem; margin-top: 1rem;
+            background: rgba(0,255,136,0.03);
+        }
+        .dl-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--g0); letter-spacing: 3px; text-align: center; margin-bottom: 10px; }
+        .dl-row { display: flex; gap: 10px; }
+        .dl-btn {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 9px; text-decoration: none; font-family: 'Orbitron', monospace;
+            font-size: 11px; font-weight: 700; letter-spacing: 1px; border-radius: 2px;
+            transition: all 0.2s;
+        }
+        .dl-png { background: rgba(0,0,0,0.4); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.1); }
+        .dl-png:hover { border-color: var(--text-dim); color: var(--text); }
+        .dl-zip { background: rgba(0,255,136,0.1); color: var(--g0); border: 1px solid rgba(0,255,136,0.3); }
+        .dl-zip:hover { background: rgba(0,255,136,0.2); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+
+        /* ── RESULT SECTION ── */
+        .result-section {
+            display: none; border: 1px solid rgba(0,255,136,0.3); border-radius: 2px; padding: 1.2rem;
+            margin-top: 1rem; background: rgba(0,255,136,0.04);
+            box-shadow: 0 0 30px rgba(0,255,136,0.08);
+        }
+        .result-label { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--g0); letter-spacing: 2px; text-align: center; margin-bottom: 10px; }
+
+        /* ── STATUS ── */
+        .status-bar {
+            display: none; font-family: 'Share Tech Mono', monospace; font-size: 11px;
+            color: #ffcc00; letter-spacing: 1px; text-align: center;
+            padding: 6px; margin-bottom: 10px;
+            background: rgba(255,204,0,0.05); border: 1px solid rgba(255,204,0,0.15); border-radius: 2px;
+        }
+        .status-bar.show { display: block; }
+
+        /* ── GITHUB GUIDE (LEFT PANEL) ── */
+        .guide-title { font-family: 'Orbitron', monospace; font-size: 10px; color: var(--g0); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.2rem; }
+
+        .guide-block {
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(0,255,136,0.1); border-radius: 2px;
+            padding: 1rem; margin-bottom: 1rem;
+        }
+        .guide-block-title { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--g0); letter-spacing: 2px; margin-bottom: 8px; display: flex; align-items: center; gap-6px; }
+        .guide-block-title::before { content: '▶ '; opacity: 0.6; }
+        .guide-code { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #88ccaa; line-height: 1.7; word-break: break-all; }
+        .guide-code b { color: var(--g0); }
+        .guide-note { font-size: 12px; color: var(--text-dim); font-family: 'Rajdhani', sans-serif; margin-top: 6px; line-height: 1.5; }
+
+        .tip-box {
+            background: rgba(0,255,136,0.06); border: 1px solid rgba(0,255,136,0.2); border-radius: 2px; padding: 1rem;
+        }
+        .tip-box .tip-title { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--g0); letter-spacing: 2px; margin-bottom: 6px; }
+        .tip-box p { font-size: 12px; color: #88ccaa; line-height: 1.5; font-family: 'Rajdhani', sans-serif; }
+
+        /* ── LOADER ── */
+        .loader { width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader.show { display: block; }
+
+        /* ── FETCH ROW ── */
+        .fetch-row { display: flex; gap: 8px; margin-bottom: 10px; }
+        .fetch-row input { flex: 1; }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.2); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="bg-blob blob-tl"></div>
+    <div class="bg-blob blob-br"></div>
+    <div class="bg-blob blob-mid"></div>
+
+    <div class="wrapper">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-badge">[ STEGANOGRAPHY ENGINE v3.0 ]</div>
+            <div class="logo">PixelVoice</div>
+            <div class="logo-sub">AUTO ZIP / UNZIP ENGINE &nbsp;·&nbsp; MEMORY OPTIMIZATION</div>
+        </div>
+
+        <div class="grid">
+
+            <!-- ===== LEFT: CLOUD GUIDE ===== -->
+            <div class="panel">
+                <div class="panel-inner">
+                    <div class="guide-title">// Cloud Direct Link</div>
+
+                    <div class="guide-block">
+                        <div class="guide-block-title">GitHub Raw URL</div>
+                        <div class="guide-code">
+                            https://raw.githubusercontent.com/<br>
+                            <b>[USERNAME]</b>/<b>[REPO]</b>/<b>[BRANCH]</b>/<b>[FILE]</b>
+                        </div>
+                        <div class="guide-note" style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(0,255,136,0.08);">
+                            <b style="color:var(--g0)">Cách lấy Raw link:</b><br>
+                            1. Mở file trên GitHub<br>
+                            2. Nhấn nút <b style="color:var(--g0)">Raw</b> góc trên phải<br>
+                            3. Copy URL trên thanh địa chỉ
+                        </div>
+                    </div>
+
+                    <div class="guide-block">
+                        <div class="guide-block-title">GitLab Raw URL</div>
+                        <div class="guide-code">
+                            https://gitlab.com/<b>[USER]</b>/<b>[REPO]</b>/<br>
+                            -/raw/<b>[BRANCH]</b>/<b>[FILE]</b>
+                        </div>
+                        <div class="guide-note" style="margin-top:8px;">
+                            Chọn file → nhấn <b style="color:var(--g0)">Open raw</b>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-title">// TIP: Auto ZIP</div>
+                        <p>Upload file .ZIP lên repo, dán raw link vào ô URL bên phải. Hệ thống tự giải nén trong RAM — không cần lưu disk.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== MIDDLE: ENCODE ===== -->
+            <div class="panel">
+                <div class="panel-inner">
+                    <div class="sec-title cyan">
+                        <span class="num">1</span>
+                        Đóng Gói — Encode
+                    </div>
+
+                    <!-- AUDIO SOURCE -->
+                    <div class="field-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <div class="field-label">Nguồn Audio <span>(Tối đa 1MB)</span></div>
+                            <div id="recordingTimer" class="rec-timer">
+                                <div class="dot"></div>
+                                <span id="timeDisplay">00:00 / 00:10</span>
+                            </div>
+                        </div>
+                        <div class="btn-row" style="margin-bottom:10px;">
+                            <button id="btnRecord" class="btn btn-rec">⏺ Ghi Âm</button>
+                            <button id="btnStop" class="btn btn-stop" disabled>⏹ Dừng</button>
+                        </div>
+                        <div class="divider"><span>HOẶC</span></div>
+                        <input type="file" id="audioUploadInput" accept="audio/*">
+                        <audio id="audioPreview" controls class="hidden"></audio>
+                    </div>
+
+                    <!-- COVER IMAGE -->
+                    <div class="field-box">
+                        <div class="field-label">Ảnh Bìa Ngụy Trang (.PNG / .JPG)</div>
+                        <input type="file" id="coverInput" accept="image/png,image/jpeg">
+                        <img id="coverPreview" class="img-preview">
+                    </div>
+
+                    <button id="btnEncode" class="btn btn-cyan" disabled>
+                        <span>Thực Thi Nhúng Dữ Liệu</span>
+                        <div id="encLoad" class="loader"></div>
+                    </button>
+
+                    <div id="downSection" class="dl-section">
+                        <div class="dl-label">// CHỌN ĐỊNH DẠNG XUẤT FILE</div>
+                        <div class="dl-row">
+                            <a id="downLinkPng" download="secret_payload.png" class="dl-btn dl-png">🖼 .PNG</a>
+                            <a id="downLinkZip" download="secret_package.zip" class="dl-btn dl-zip">📦 .ZIP</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== RIGHT: DECODE ===== -->
+            <div class="panel">
+                <div class="panel-inner">
+                    <div class="sec-title">
+                        <span class="num">2</span>
+                        Trích Xuất — Auto Unzip
+                    </div>
+
+                    <!-- FILE INPUT -->
+                    <div class="field-box">
+                        <div class="field-label">Từ Máy Tính (.PNG / .ZIP)</div>
+                        <input type="file" id="decodeFileInput" accept=".png,.zip">
+                    </div>
+
+                    <div class="divider"><span>HOẶC DÙNG CLOUD</span></div>
+
+                    <!-- URL INPUT -->
+                    <div class="field-box">
+                        <div class="field-label" style="margin-bottom:10px;">Cloud Storage URL (.PNG / .ZIP)</div>
+                        <div class="fetch-row">
+                            <input type="text" id="decodeUrlInput" placeholder="Dán raw link vào đây...">
+                            <button id="btnLoadUrl" class="btn btn-sm btn-green">FETCH</button>
+                        </div>
+                        <label class="check-row">
+                            <input type="checkbox" id="useProxy">
+                            <span>Bật CORS Proxy (nếu link bị block)</span>
+                        </label>
+                    </div>
+
+                    <div id="unzipStatus" class="status-bar"></div>
+                    <img id="decodePreview" class="img-preview" style="margin-bottom:12px;">
+
+                    <button id="btnDecode" class="btn btn-green" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <span>Quét &amp; Trích Xuất Voice</span>
+                        <div id="decLoad" class="loader"></div>
+                    </button>
+
+                    <div id="resultSection" class="result-section">
+                        <div class="result-label">// PAYLOAD EXTRACTED — RAM CLEANED</div>
+                        <audio id="audioResult" controls></audio>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <script>
+        const DELIMITER = "||EOF||";
+        let audioBase64 = "";
+        let coverImg = new Image();
+        let decodeImg = new Image();
+        let tempObjectURLs = [];
+        const MAX_FILE_SIZE = 1 * 1024 * 1024;
+        const MAX_SECONDS = 10;
+
+        const $ = id => document.getElementById(id);
+
+        // ── MEMORY CLEANUP ──
+        function cleanupMemory() {
+            if (tempObjectURLs.length > 0) {
+                tempObjectURLs.forEach(url => URL.revokeObjectURL(url));
+                tempObjectURLs = [];
+            }
+        }
+
+        // ── RECORDING ──
+        let recorder, chunks = [], recordInterval, elapsedSeconds = 0;
+
+        const stopRecording = () => {
+            if (recorder && recorder.state !== 'inactive') recorder.stop();
+            clearInterval(recordInterval);
+            $('recordingTimer').classList.remove('show');
+            $('btnRecord').disabled = false;
+            $('btnRecord').classList.remove('recording');
+            $('btnStop').disabled = true;
+        };
+
+        $('btnRecord').onclick = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                recorder = new MediaRecorder(stream);
+                chunks = [];
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = () => {
+                        audioBase64 = reader.result;
+                        $('audioPreview').src = audioBase64;
+                        $('audioPreview').classList.remove('hidden');
+                        if (coverImg.src) $('btnEncode').disabled = false;
+                    };
+                    stream.getTracks().forEach(t => t.stop());
+                };
+                recorder.start();
+                $('audioUploadInput').value = "";
+                $('btnRecord').disabled = true;
+                $('btnRecord').classList.add('recording');
+                $('btnStop').disabled = false;
+                $('audioPreview').classList.add('hidden');
+                elapsedSeconds = 0;
+                const maxStr = MAX_SECONDS.toString().padStart(2, '0');
+                $('timeDisplay').innerText = `00:00 / 00:${maxStr}`;
+                $('recordingTimer').classList.add('show');
+                recordInterval = setInterval(() => {
+                    elapsedSeconds++;
+                    const s = elapsedSeconds.toString().padStart(2, '0');
+                    $('timeDisplay').innerText = `00:${s} / 00:${maxStr}`;
+                    if (elapsedSeconds >= MAX_SECONDS) stopRecording();
+                }, 1000);
+            } catch(e) { alert("Thiếu quyền truy cập Micro!"); }
+        };
+
+        $('btnStop').onclick = stopRecording;
+
+        $('audioUploadInput').onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > MAX_FILE_SIZE) {
+                alert("⛔ File quá nặng! Vui lòng chọn file âm thanh dưới 1MB.");
+                $('audioUploadInput').value = "";
+                return;
+            }
+            stopRecording();
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                audioBase64 = reader.result;
+                $('audioPreview').src = audioBase64;
+                $('audioPreview').classList.remove('hidden');
+                if (coverImg.src) $('btnEncode').disabled = false;
+            };
+        };
+
+        $('coverInput').onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                coverImg.src = ev.target.result;
+                $('coverPreview').src = ev.target.result;
+                $('coverPreview').style.display = 'block';
+                coverImg.onload = () => { if (audioBase64) $('btnEncode').disabled = false; };
+            };
+            r.readAsDataURL(file);
+        };
+
+        $('btnEncode').onclick = () => {
+            $('encLoad').classList.add('show');
+            $('btnEncode').disabled = true;
+            setTimeout(async () => {
+                const cvs = $('canvas'), ctx = cvs.getContext('2d');
+                cvs.width = coverImg.width; cvs.height = coverImg.height;
+                ctx.drawImage(coverImg, 0, 0);
+                const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height);
+                const data = imgData.data;
+                const bin = (audioBase64 + DELIMITER).split('').map(c => c.charCodeAt(0).toString(2).padStart(8,'0')).join('');
+                if (bin.length > (data.length / 4) * 3) {
+                    alert("CẢNH BÁO: Ảnh quá nhỏ, không đủ pixel chứa audio!");
+                    $('encLoad').classList.remove('show');
+                    $('btnEncode').disabled = false;
+                    return;
+                }
+                for (let i = 0, bit = 0; i < data.length && bit < bin.length; i += 4)
+                    for (let j = 0; j < 3 && bit < bin.length; j++)
+                        data[i+j] = (data[i+j] & 0xFE) | parseInt(bin[bit++]);
+                ctx.putImageData(imgData, 0, 0);
+                const pngDataUrl = cvs.toDataURL('image/png');
+                $('downLinkPng').href = pngDataUrl;
+                try {
+                    const zip = new JSZip();
+                    const res = await fetch(pngDataUrl);
+                    const blob = await res.blob();
+                    zip.file("secret_payload.png", blob);
+                    const zipBlob = await zip.generateAsync({ type: "blob" });
+                    cleanupMemory();
+                    const zipUrl = URL.createObjectURL(zipBlob);
+                    tempObjectURLs.push(zipUrl);
+                    $('downLinkZip').href = zipUrl;
+                    $('downSection').style.display = 'block';
+                } catch (err) {
+                    console.error("Lỗi tạo ZIP:", err);
+                    alert("Lỗi tạo ZIP, nhưng bản PNG vẫn hoạt động.");
+                    $('downSection').style.display = 'block';
+                }
+                $('encLoad').classList.remove('show');
+                $('btnEncode').disabled = false;
+            }, 50);
+        };
+
+        // ── DECODE ──
+
+        // FIX: Nhận thêm tham số isZip để xử lý blob từ URL đúng cách
+        async function processDecodeFile(fileBlob, forceIsZip = false) {
+            const statusEl = $('unzipStatus');
+            statusEl.classList.add('show');
+            $('btnDecode').disabled = true;
+            $('resultSection').style.display = 'none';
+            cleanupMemory();
+
+            try {
+                const isZip = forceIsZip
+                    || fileBlob.type === "application/zip"
+                    || fileBlob.type === "application/x-zip-compressed"
+                    || (fileBlob.name && fileBlob.name.toLowerCase().endsWith('.zip'));
+
+                let imageObjectUrl = "";
+
+                if (isZip) {
+                    statusEl.innerText = "Phát hiện ZIP — đang giải nén trong RAM...";
+                    const zip = new JSZip();
+                    const loadedZip = await zip.loadAsync(fileBlob);
+                    const files = Object.keys(loadedZip.files);
+                    const pngFilename = files.find(f => f.toLowerCase().endsWith('.png'));
+                    if (!pngFilename) throw new Error("Không tìm thấy .PNG trong ZIP!");
+                    const extractedBlob = await loadedZip.files[pngFilename].async("blob");
+                    imageObjectUrl = URL.createObjectURL(extractedBlob);
+                    tempObjectURLs.push(imageObjectUrl);
+                } else {
+                    statusEl.innerText = "Đang đọc cấu trúc ảnh...";
+                    imageObjectUrl = URL.createObjectURL(fileBlob);
+                    tempObjectURLs.push(imageObjectUrl);
+                }
+
+                decodeImg = new Image();
+                decodeImg.onload = () => {
+                    $('decodePreview').src = decodeImg.src;
+                    $('decodePreview').style.display = 'block';
+                    $('btnDecode').disabled = false;
+                    statusEl.classList.remove('show');
+                };
+                decodeImg.onerror = () => { alert("Lỗi cấu trúc hình ảnh!"); statusEl.classList.remove('show'); };
+                decodeImg.src = imageObjectUrl;
+
+            } catch (err) {
+                console.error(err);
+                alert("LỖI: " + err.message);
+                statusEl.classList.remove('show');
+            }
+        }
+
+        $('decodeFileInput').onchange = e => {
+            const file = e.target.files[0];
+            if (file) processDecodeFile(file);
+        };
+
+        $('btnLoadUrl').onclick = async () => {
+            const rawUrl = $('decodeUrlInput').value.trim();
+            if (!rawUrl) return;
+            const statusEl = $('unzipStatus');
+            statusEl.innerText = "Đang tải dữ liệu từ Cloud...";
+            statusEl.classList.add('show');
+
+            const useProxy = $('useProxy').checked;
+            const fetchUrl = useProxy ? `https://corsproxy.io/?${encodeURIComponent(rawUrl)}` : rawUrl;
+
+            // FIX: Kiểm tra đuôi .zip từ URL gốc TRƯỚC khi fetch
+            const isZip = rawUrl.toLowerCase().includes('.zip');
+
+            try {
+                const response = await fetch(fetchUrl);
+                if (!response.ok) throw new Error("Link không phản hồi (CORS/404)");
+                const blob = await response.blob();
+                // Truyền isZip vào hàm xử lý
+                await processDecodeFile(blob, isZip);
+            } catch (err) {
+                alert("Lỗi tải link. Đảm bảo dùng Direct Link và thử bật CORS Proxy.");
+                statusEl.classList.remove('show');
+            }
+        };
+
+        $('btnDecode').onclick = () => {
+            $('decLoad').classList.add('show');
+            $('btnDecode').disabled = true;
+            setTimeout(() => {
+                const cvs = $('canvas'), ctx = cvs.getContext('2d');
+                cvs.width = decodeImg.width; cvs.height = decodeImg.height;
+                ctx.drawImage(decodeImg, 0, 0);
+                try {
+                    const data = ctx.getImageData(0, 0, cvs.width, cvs.height).data;
+                    let bin = "", txt = "", found = false;
+                    for (let i = 0; i < data.length; i += 4) {
+                        for (let j = 0; j < 3; j++) {
+                            bin += (data[i+j] & 1).toString();
+                            if (bin.length === 8) {
+                                txt += String.fromCharCode(parseInt(bin, 2));
+                                bin = "";
+                                if (txt.endsWith(DELIMITER)) {
+                                    $('audioResult').src = txt.replace(DELIMITER, '');
+                                    $('resultSection').style.display = 'block';
+                                    found = true; break;
+                                }
+                            }
+                        }
+                        if (found) break;
+                    }
+                    if (!found) alert("Không tìm thấy Audio! Ảnh không chứa dữ liệu hoặc bị nén mất dữ liệu.");
+                    cleanupMemory();
+                } catch(err) {
+                    // FIX: Sửa typo "dọc" → "đọc"
+                    alert("Canvas Tainted! Server từ chối cấp quyền đọc ảnh.");
+                }
+                $('decLoad').classList.remove('show');
+                $('btnDecode').disabled = false;
+            }, 50);
+        };
+    </script>
+</body>
+</html>
