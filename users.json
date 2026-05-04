@@ -1,7 +1,7 @@
 {
     "settings": {
         "session_hours": 8,
-        "app_name": "Tools",
+        "app_name": "Tools Center",
         "protected_tools": [
             "*"
         ]
