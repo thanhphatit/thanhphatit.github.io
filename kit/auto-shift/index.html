@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoShift — Lịch Làm Việc</title>
+    <!--========== FAVICONS ==========-->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicons/favicon-16x16.png" />
+    <link rel="manifest" href="assets/favicons/site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+    <style>
+        /* ─── TOKENS ─── */
+        :root[data-theme="dark"] {
+            --bg:         #0b0d11;
+            --surface:    #13161c;
+            --surface2:   #1b1f28;
+            --surface3:   #242834;
+            --border:     #2a2e3e;
+            --border2:    #353b50;
+            --text:       #e8eaf0;
+            --text-dim:   #7a80a0;
+            --text-muted: #454c66;
+            --accent:     #6c63ff;
+            --accent-glow:#6c63ff44;
+            --cyan:       #00d4c8;
+            --amber:      #f4a63a;
+            --red:        #ff5470;
+            --green:      #22d68f;
+            --header-bg:  #0f111a;
+            --chip-bg:    #1e2230;
+            --chip-border:#2e3450;
+            --ot-bg:      #2a1218;
+            --ot-border:  #ff5470;
+            --sel-bg:     #2a2015;
+            --sel-border: #f4a63a;
+            --scrollbar:  #2a2e3e;
+        }
+        :root[data-theme="light"] {
+            --bg:         #f0f2f8;
+            --surface:    #ffffff;
+            --surface2:   #f7f8fc;
+            --surface3:   #eef0f8;
+            --border:     #dde0ef;
+            --border2:    #cccfe0;
+            --text:       #1a1d2e;
+            --text-dim:   #5a6080;
+            --text-muted: #9099bc;
+            --accent:     #5752e8;
+            --accent-glow:#5752e820;
+            --cyan:       #009e94;
+            --amber:      #c47800;
+            --red:        #d92f4a;
+            --green:      #16a567;
+            --header-bg:  #1a1d2e;
+            --chip-bg:    #eef0fb;
+            --chip-border:#d0d4f0;
+            --ot-bg:      #fff0f3;
+            --ot-border:  #d92f4a;
+            --sel-bg:     #fff8e6;
+            --sel-border: #c47800;
+            --scrollbar:  #dde0ef;
+        }
+
+        /* ─── RESET & BASE ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.4s, color 0.4s;
+            padding: 0 0 60px;
+        }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+
+        /* ─── HEADER ─── */
+        .header {
+            background: var(--header-bg);
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text);
+        }
+        .logo span {
+            color: var(--accent);
+        }
+        .logo-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            margin-left: 4px;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .header-tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ─── THEME TOGGLE ─── */
+        .theme-toggle {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 4px;
+            display: flex;
+            cursor: pointer;
+            gap: 2px;
+            transition: 0.3s;
+        }
+        .theme-toggle button {
+            padding: 6px 14px;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Manrope', sans-serif;
+        }
+        .theme-toggle button.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        .main { max-width: 1340px; margin: 0 auto; padding: 36px 24px; }
+
+        /* ─── SECTION LABEL ─── */
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        /* ─── CONFIG PANEL ─── */
+        .config-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 24px;
+            transition: background 0.4s, border 0.4s;
+        }
+        .config-col { display: flex; flex-direction: column; gap: 16px; }
+        .config-block { display: flex; flex-direction: column; gap: 6px; }
+        .config-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            letter-spacing: 0.02em;
+        }
+        .config-label em {
+            font-style: normal;
+            font-family: 'DM Mono', monospace;
+            color: var(--accent);
+            margin-right: 6px;
+            font-size: 0.72rem;
+        }
+
+        /* ─── INPUTS ─── */
+        input[type="text"], input[type="number"] {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.85rem;
+            width: 100%;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s, background 0.4s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* ─── EMPLOYEE GRID ─── */
+        .emp-count-row { display: flex; gap: 10px; align-items: center; }
+        .emp-count-row input { width: 80px; }
+        .emp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+
+        /* ─── DAY CHECKBOXES ─── */
+        .days-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .day-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            transition: 0.2s;
+            user-select: none;
+        }
+        .day-chip input[type="checkbox"] { display: none; }
+        .day-chip.checked {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .day-chip:hover { border-color: var(--accent); }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 11px 22px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 0.02em;
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-accent:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .btn-sm { padding: 8px 16px; font-size: 0.78rem; }
+
+        .btn-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 28px 0;
+            flex-wrap: wrap;
+        }
+        .btn-generate {
+            background: linear-gradient(135deg, var(--accent) 0%, #9b4dff 100%);
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 14px 32px;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px var(--accent-glow);
+        }
+        .btn-generate:hover { box-shadow: 0 8px 32px var(--accent-glow); transform: translateY(-2px); }
+
+        .dl-group {
+            display: flex;
+            align-items: stretch;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border2);
+        }
+        .dl-label {
+            padding: 0 14px;
+            font-size: 0.72rem;
+            font-family: 'DM Mono', monospace;
+            color: var(--text-muted);
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            border-right: 1px solid var(--border2);
+            white-space: nowrap;
+            user-select: none;
+        }
+        .dl-group .btn {
+            border-radius: 0;
+            border: none !important;
+            border-left: 1px solid var(--border2) !important;
+        }
+        .dl-group .btn-csv {
+            background: var(--surface) !important;
+            color: var(--cyan) !important;
+        }
+        .dl-group .btn-csv:hover { background: var(--cyan) !important; color: var(--bg) !important; }
+        .dl-group .btn-xlsx {
+            background: var(--surface) !important;
+            color: var(--green) !important;
+        }
+        .dl-group .btn-xlsx:hover { background: var(--green) !important; color: var(--bg) !important; }
+
+        /* ─── MSG BAR ─── */
+        #msgBar {
+            display: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+        .msg-error   { background: #2a0f13; color: var(--red);   border-color: var(--red); }
+        .msg-success { background: #0c2520; color: var(--green); border-color: var(--green); }
+        .msg-warning { background: #261c08; color: var(--amber); border-color: var(--amber); }
+        [data-theme="light"] .msg-error   { background: #fff0f3; color: #c0162e; border-color: #c0162e; }
+        [data-theme="light"] .msg-success { background: #e6fff5; color: #0f7a52; border-color: #0f7a52; }
+        [data-theme="light"] .msg-warning { background: #fff8e6; color: #8a5200; border-color: #8a5200; }
+
+        /* ─── CONFLICT PANEL ─── */
+        .conflict-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            transition: background 0.4s, border 0.4s;
+        }
+        .conflict-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .conflict-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .conflict-add-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .conflict-select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 14px;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.82rem;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.2s, background 0.4s;
+            min-width: 130px;
+        }
+        .conflict-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .conflict-vs {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding: 0 4px;
+        }
+        .conflict-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+            min-height: 36px;
+        }
+        .conflict-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--ot-bg);
+            border: 1px solid var(--ot-border);
+            border-radius: 7px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--red);
+            font-family: 'Manrope', sans-serif;
+            animation: fadeIn 0.2s ease;
+        }
+        .conflict-tag button {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1;
+            opacity: 0.6;
+            transition: opacity 0.15s;
+        }
+        .conflict-tag button:hover { opacity: 1; }
+        .conflict-empty {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding: 8px 0;
+        }
+
+        /* ─── SCHEDULE TABLE ─── */
+        .table-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: auto; /* changed from hidden to auto for horizontal scroll */
+            margin-bottom: 28px;
+            transition: background 0.4s, border 0.4s;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            background: var(--surface3);
+            color: var(--text-dim);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        thead th:first-child { color: var(--accent); text-align: left; }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:hover { background: var(--surface2); }
+        tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            text-align: center;
+        }
+        /* ─── TRANSPOSED: first col is now Ca (shift), first row is Ngày (day) ─── */
+        tbody td:first-child {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            text-align: left;
+            white-space: nowrap;
+            border-right: 1px solid var(--border);
+            background: var(--surface3);
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody tr:last-child td { border-bottom: none; }
+
+        /* ─── EMPLOYEE CHIPS ─── */
+        .emp-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin: 3px;
+            padding: 5px 11px;
+            border-radius: 6px;
+            background: var(--chip-bg);
+            border: 1px solid var(--chip-border);
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text);
+            transition: 0.18s;
+            font-family: 'Manrope', sans-serif;
+        }
+        .emp-chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+        .emp-chip:hover { border-color: var(--accent); transform: scale(1.04); }
+        .emp-chip.is-ot { background: var(--ot-bg); border-color: var(--ot-border); color: var(--red); }
+        .emp-chip.is-ot::before { background: var(--red); }
+        .emp-chip.selected { background: var(--sel-bg); border-color: var(--sel-border); color: var(--amber); box-shadow: 0 0 0 2px var(--sel-border); }
+        .emp-chip.selected::before { background: var(--amber); }
+        .empty-slot { color: var(--text-muted); font-size: 0.75rem; font-family: 'DM Mono', monospace; }
+
+        /* ─── STATS TABLE ─── */
+        .stats-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .stats-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+        .stats-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+        .stats-badge { background: var(--accent-glow); border: 1px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 3px 9px; border-radius: 50px; }
+        #stats { width: 100%; border-collapse: collapse; }
+        #stats thead th { background: var(--surface3); color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+        #stats tbody td { padding: 11px 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; text-align: left; }
+        #stats tbody td:last-child { font-family: 'DM Mono', monospace; color: var(--cyan); font-weight: 500; }
+        .stat-bar-wrap { display: flex; align-items: center; gap: 12px; }
+        .stat-bar { height: 4px; border-radius: 2px; background: var(--accent); transition: width 0.6s cubic-bezier(.4,0,.2,1); }
+        #stats tbody tr:last-child td { border-bottom: none; }
+
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 28px 0; }
+        .schedule-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .schedule-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; }
+        .swap-hint { font-size: 0.75rem; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+
+        .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+        .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.75rem; color: var(--text-dim); }
+        .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        @media (max-width: 768px) {
+            .config-panel { grid-template-columns: 1fr; }
+            .header { padding: 14px 20px; }
+            .main { padding: 20px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">Auto<span>Shift</span><span class="logo-dot"></span></div>
+    <div class="header-right">
+        <span class="header-tag">Scheduler v2.6 - MODE</span>
+        <div class="theme-toggle" id="themeToggle">
+            <button onclick="setTheme('dark')" id="btnDark" class="active">Tối</button>
+            <button onclick="setTheme('light')" id="btnLight">Sáng</button>
+        </div>
+    </div>
+</header>
+
+<div class="main">
+    <p class="section-label">▸ Cấu hình lịch</p>
+    <div class="config-panel">
+        <div class="config-col">
+            <div class="config-block">
+                <label class="config-label"><em>01</em>Danh sách nhân viên</label>
+                <div class="emp-count-row">
+                    <input type="number" id="numEmployees" value="8" min="1">
+                    <button class="btn btn-accent btn-sm" onclick="createEmployeeInputs()">Cập nhật</button>
+                </div>
+                <div class="emp-grid" id="employeeInputs"></div>
+            </div>
+            <div class="config-block">
+                <label class="config-label"><em>04</em>Số tuần lịch</label>
+                <input type="number" id="numWeeks" value="1" min="1">
+            </div>
+        </div>
+        <div class="config-col">
+            <div class="config-block">
+                <label class="config-label"><em>02</em>Ca làm việc (phân cách bằng dấu phẩy)</label>
+                <input type="text" id="shiftsInput" value="6:00-14:00, 8:00-16:00, 14:00-22:00, 15:30-23:30">
+            </div>
+            <div class="config-block">
+                <label class="config-label"><em>03</em>Số người / ca (Định biên)</label>
+                <input type="text" id="staffPerShiftInput" value="2,2,2,2">
+            </div>
+            <div class="config-block">
+                <label class="config-label"><em>05</em>Giới hạn OT / ngày</label>
+                <input type="number" id="maxOTPerDay" value="1" min="0">
+            </div>
+            <div class="config-block">
+                <label class="config-label"><em>06</em>Ngày làm việc</label>
+                <div class="days-row" id="dayCheckboxes">
+                    <label class="day-chip checked"><input type="checkbox" checked value="T2">T2</label>
+                    <label class="day-chip checked"><input type="checkbox" checked value="T3">T3</label>
+                    <label class="day-chip checked"><input type="checkbox" checked value="T4">T4</label>
+                    <label class="day-chip checked"><input type="checkbox" checked value="T5">T5</label>
+                    <label class="day-chip checked"><input type="checkbox" checked value="T6">T6</label>
+                    <label class="day-chip checked"><input type="checkbox" checked value="T7">T7</label>
+                    <label class="day-chip checked"><input type="checkbox" checked value="CN">CN</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="section-label" style="margin-top: 20px;">▸ Cặp nhân viên không làm chung</p>
+    <div class="conflict-panel">
+        <div class="conflict-header">
+            <span class="conflict-title">🚫 Danh sách cặp cấm</span>
+            <div class="conflict-add-row">
+                <select class="conflict-select" id="conflictA"></select>
+                <span class="conflict-vs">không làm chung buổi</span>
+                <select class="conflict-select" id="conflictB"></select>
+                <button class="btn btn-accent btn-sm" onclick="addConflict()">+ Thêm</button>
+            </div>
+        </div>
+        <div class="conflict-list" id="conflictList">
+            <span class="conflict-empty">Chưa có cặp nào bị cấm.</span>
+        </div>
+    </div>
+
+    <div id="msgBar"></div>
+
+    <div class="btn-bar">
+        <button class="btn btn-generate" onclick="generateSchedule()">⚡ Xuất lịch ngẫu nhiên & xoay vòng</button>
+        <div class="dl-group">
+                <span class="dl-label">↓ Tải xuống</span>
+                <button class="btn btn-csv" onclick="downloadCSV()">.CSV</button>
+                <button class="btn btn-xlsx" onclick="downloadXLSX()">.XLSX</button>
+            </div>
+    </div>
+
+    <div id="scheduleSection" style="display:none">
+        <div class="schedule-header">
+            <span class="schedule-title">📅 Lịch làm việc</span>
+            <span class="swap-hint">↔ Click hai nhân viên để hoán đổi ca</span>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background: var(--green)"></div>Ca chính</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--red)"></div>Tăng ca (OT)</div>
+            <div class="legend-item"><div class="legend-dot" style="background: var(--amber)"></div>Đang chọn đổi</div>
+            <div class="legend-item" style="margin-left: auto; font-size:0.7rem; color:var(--text-muted); font-family:'DM Mono',monospace">
+                ⚠ Ca tối muộn nhất → không xếp ca sáng sớm hôm sau
+            </div>
+        </div>
+        <div class="table-wrapper"><table id="schedule"></table></div>
+
+        <div class="divider"></div>
+
+        <div class="stats-panel">
+            <div class="stats-header">
+                <span class="stats-title">📊 Thống kê tổng ca</span>
+                <span class="stats-badge" id="statsBadge">0 nhân viên</span>
+            </div>
+            <table id="stats">
+                <thead>
+                    <tr><th>Nhân viên</th><th>Tổng ca</th><th style="width: 40%">Phân bổ</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+let employeeNodes = [];
+let scheduleData = [];
+let selectedForSwap = null;
+let conflictPairs = [];
+
+function syncConflictSelects() {
+    const names = employeeNodes.map(i => i.value.trim()).filter(n => n);
+    const before = conflictPairs.length;
+    conflictPairs = conflictPairs.filter(p => names.includes(p.a) && names.includes(p.b));
+    if (conflictPairs.length < before) renderConflictList();
+
+    ['conflictA', 'conflictB'].forEach(id => {
+        const sel = document.getElementById(id);
+        const prev = sel.value;
+        sel.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
+        if (names.includes(prev)) sel.value = prev;
+    });
+}
+
+function addConflict() {
+    const a = document.getElementById('conflictA').value.trim();
+    const b = document.getElementById('conflictB').value.trim();
+    if (!a || !b || a === b) return;
+    const exists = conflictPairs.some(p => (p.a === a && p.b === b) || (p.a === b && p.b === a));
+    if (exists) return;
+    conflictPairs.push({ a, b });
+    renderConflictList();
+}
+
+function removeConflict(idx) {
+    conflictPairs.splice(idx, 1);
+    renderConflictList();
+}
+
+function renderConflictList() {
+    const list = document.getElementById('conflictList');
+    if (!conflictPairs.length) {
+        list.innerHTML = '<span class="conflict-empty">Chưa có cặp nào bị cấm.</span>';
+        return;
+    }
+    list.innerHTML = conflictPairs.map((p, i) =>
+        `<span class="conflict-tag">
+            ${p.a} <span style="opacity:0.5;font-weight:400">✕</span> ${p.b}
+            <button onclick="removeConflict(${i})" title="Xoá">×</button>
+        </span>`
+    ).join('');
+}
+
+// LOGIC MỚI: Định nghĩa Ca Tối là kết thúc sau 18:00
+function isShiftNight(shiftStr) {
+    const parts = shiftStr.split('-');
+    if (parts.length < 2) return false;
+    const [eh, em] = parts[1].split(':').map(Number);
+    return (eh * 60 + em) > (18 * 60); 
+}
+
+// LOGIC MỚI: "Không làm chung" nghĩa là KHÔNG ĐƯỢC CÙNG LÀM CA SÁNG HOẶC CÙNG LÀM CA TỐI
+function violatesConflict(empName, shiftName, dayData, shifts) {
+    const isTargetNight = isShiftNight(shiftName);
+
+    const coworkersInSameSession = new Set();
+    shifts.forEach(s => {
+        // Kiểm tra xem ca s có cùng buổi (Sáng/Tối) với ca shiftName đang xét không
+        if (isShiftNight(s) === isTargetNight) {
+            (dayData.shifts[s] || []).forEach(e => {
+                if (!e.isEmpty && e.name !== empName) coworkersInSameSession.add(e.name);
+            });
+        }
+    });
+
+    return conflictPairs.some(p =>
+        (p.a === empName && coworkersInSameSession.has(p.b)) ||
+        (p.b === empName && coworkersInSameSession.has(p.a))
+    );
+}
+
+function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('btnDark').classList.toggle('active', t === 'dark');
+    document.getElementById('btnLight').classList.toggle('active', t === 'light');
+    localStorage.setItem('autoshift-theme', t);
+}
+(function() {
+    const saved = localStorage.getItem('autoshift-theme') || 'dark';
+    setTheme(saved);
+})();
+
+document.getElementById('dayCheckboxes').addEventListener('change', function(e) {
+    const chip = e.target.closest('.day-chip');
+    if (chip) chip.classList.toggle('checked', e.target.checked);
+});
+
+function showMsg(text, type) {
+    const bar = document.getElementById('msgBar');
+    bar.innerText = text;
+    bar.className = 'msg-' + type;
+    bar.style.display = 'block';
+}
+
+function createEmployeeInputs() {
+    const num = parseInt(document.getElementById('numEmployees').value);
+    const container = document.getElementById('employeeInputs');
+    container.innerHTML = '';
+    employeeNodes = [];
+    for (let i = 0; i < num; i++) {
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.value = `NV ${i + 1}`;
+        inp.placeholder = `Nhân viên ${i + 1}`;
+        container.appendChild(inp);
+        employeeNodes.push(inp);
+        inp.addEventListener('input', syncConflictSelects);
+    }
+    syncConflictSelects();
+}
+
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function generateSchedule() {
+    const names = employeeNodes.map(i => i.value.trim()).filter(n => n !== '');
+    const invalidPairs = conflictPairs.filter(p => !names.includes(p.a) || !names.includes(p.b));
+    if (invalidPairs.length > 0) {
+        showMsg('⚠️ Lỗi: Cặp cấm có nhân viên không tồn tại. Vui lòng xoá và thêm lại.', 'error');
+        return;
+    }
+    const shifts = document.getElementById('shiftsInput').value.split(',').map(s => s.trim());
+    const staffCounts = document.getElementById('staffPerShiftInput').value.split(',').map(s => parseInt(s.trim()));
+    const weeks = parseInt(document.getElementById('numWeeks').value);
+    const maxDayOT = parseInt(document.getElementById('maxOTPerDay').value);
+    const days = Array.from(document.querySelectorAll('#dayCheckboxes input:checked')).map(i => i.value);
+
+    const totalSlotsPerDay = staffCounts.reduce((a, b) => a + b, 0);
+    let actualMaxOT = (names.length < totalSlotsPerDay) ? maxDayOT : 0;
+
+    if (names.length < totalSlotsPerDay && maxDayOT <= 0) {
+        showMsg('❌ Lỗi: Thiếu nhân sự nhưng giới hạn OT = 0.', 'error');
+        return;
+    }
+    showMsg('✅ Chế độ: Phân bổ công bằng, ép buộc tách nhóm Sáng/Tối.', 'success');
+
+    let workStats = {};
+    let shiftTypeStats = {}; 
+    let exactShiftStats = {}; // THEO DÕI TỪNG CA CỤ THỂ 6h vs 8h
+
+    names.forEach(n => {
+        workStats[n] = 0;
+        shiftTypeStats[n] = { morning: 0, night: 0 };
+        exactShiftStats[n] = {};
+        shifts.forEach(s => exactShiftStats[n][s] = 0);
+    });
+
+    let dayCount = 0;
+    let nightWorkersPrevDay = new Set();
+    scheduleData = [];
+
+    const expectedEmpty = Math.max(0, totalSlotsPerDay - (names.length + actualMaxOT));
+    const latestNightShiftName  = shifts.reduce((latest, s) => isShiftNight(s) ? s : latest, shifts[shifts.length - 1]);
+    const earliestMorningShiftName = shifts[0];
+
+    for (let w = 1; w <= weeks; w++) {
+        days.forEach(d => {
+            dayCount++;
+            const blockedForMorning = new Set(nightWorkersPrevDay);
+            
+            let bestDayData = null;
+            let bestEmptyCount = Infinity;
+            let bestAssignedStats = null;
+            let bestShiftTypeStats = null;
+            let bestExactShiftStats = null;
+
+            for (let attempt = 0; attempt < 50; attempt++) {
+                let tempDayData = { day: weeks > 1 ? `${d} (W${w})` : d, shifts: {} };
+                shifts.forEach(s => tempDayData.shifts[s] = []);
+                let tempAssignedToday = new Set();
+                let tempDayOTCount = 0;
+                
+                let tempWorkStats = { ...workStats };
+                let tempShiftTypeStats = {};
+                let tempExactShiftStats = {};
+                names.forEach(n => {
+                    tempShiftTypeStats[n] = { ...shiftTypeStats[n] };
+                    tempExactShiftStats[n] = { ...exactShiftStats[n] };
+                });
+
+                const recordAssignment = (name, isNight, shiftName) => {
+                    tempWorkStats[name]++;
+                    if (isNight) tempShiftTypeStats[name].night++;
+                    else tempShiftTypeStats[name].morning++;
+                    tempExactShiftStats[name][shiftName]++;
+                };
+
+                // TRỘN NGẪU NHIÊN THỨ TỰ CÁC CA SÁNG VÀ CA TỐI ĐỂ 6H KHÔNG ĐƯỢC ƯU TIÊN HƠN 8H
+                let morningIndices = [];
+                let nightIndices = [];
+                shifts.forEach((s, idx) => {
+                    if (isShiftNight(s)) nightIndices.push(idx);
+                    else morningIndices.push(idx);
+                });
+                shuffle(morningIndices);
+                shuffle(nightIndices);
+                // Xếp ca sáng trước để lấy OT cho ca tối
+                let shiftOrder = [...morningIndices, ...nightIndices];
+
+                shiftOrder.forEach(idx => {
+                    if (idx >= shifts.length) return;
+                    const shiftName = shifts[idx];
+                    const needed = staffCounts[idx] || 0;
+                    let selected = tempDayData.shifts[shiftName];
+                    const isEarlyMorningShift = (shiftName === earliestMorningShiftName);
+                    const isNight = isShiftNight(shiftName);
+
+                    const sortAvailable = (a, b) => {
+                        if (tempWorkStats[a] !== tempWorkStats[b]) return tempWorkStats[a] - tempWorkStats[b];
+                        
+                        if (isNight) {
+                            if (tempShiftTypeStats[a].night !== tempShiftTypeStats[b].night) 
+                                return tempShiftTypeStats[a].night - tempShiftTypeStats[b].night;
+                        } else {
+                            if (tempShiftTypeStats[a].morning !== tempShiftTypeStats[b].morning) 
+                                return tempShiftTypeStats[a].morning - tempShiftTypeStats[b].morning;
+                        }
+
+                        // Ưu tiên chia đều cho ca cụ thể (để không ai làm 6h hoài)
+                        return tempExactShiftStats[a][shiftName] - tempExactShiftStats[b][shiftName];
+                    };
+
+                    // Bước 1: OT nối ca
+                    if (actualMaxOT > 0 && isNight && idx >= morningIndices.length) {
+                        const morningShiftName = shifts[idx - morningIndices.length]; // link logic
+                        if (morningShiftName) {
+                            let potentialOT = (tempDayData.shifts[morningShiftName] || [])
+                                .filter(e => !e.isOT && !e.isEmpty).map(e => e.name);
+                            shuffle(potentialOT);
+                            potentialOT.sort(sortAvailable);
+                            while (selected.length < needed && potentialOT.length > 0 && tempDayOTCount < actualMaxOT) {
+                                const pickIdx = potentialOT.findIndex(n => !selected.find(e => e.name === n) && !violatesConflict(n, shiftName, tempDayData, shifts));
+                                if (pickIdx === -1) break;
+                                const name = potentialOT.splice(pickIdx, 1)[0];
+                                selected.push({ name, isOT: true });
+                                recordAssignment(name, isNight, shiftName);
+                                tempDayOTCount++;
+                            }
+                        }
+                    }
+
+                    // Bước 2: Người chưa làm
+                    let available = names.filter(n =>
+                        !tempAssignedToday.has(n) && !selected.find(e => e.name === n) &&
+                        !(isEarlyMorningShift && blockedForMorning.has(n))
+                    );
+                    shuffle(available);
+                    available.sort(sortAvailable);
+                    while (selected.length < needed && available.length > 0) {
+                        const pickIdx = available.findIndex(n => !violatesConflict(n, shiftName, tempDayData, shifts));
+                        if (pickIdx === -1) break;
+                        const name = available.splice(pickIdx, 1)[0];
+                        selected.push({ name, isOT: false });
+                        tempAssignedToday.add(name);
+                        recordAssignment(name, isNight, shiftName);
+                    }
+
+                    // Bước 3: OT fallback
+                    if (selected.length < needed && actualMaxOT > 0) {
+                        let others = names.filter(n =>
+                            !selected.find(e => e.name === n) && !(isEarlyMorningShift && blockedForMorning.has(n))
+                        );
+                        shuffle(others);
+                        others.sort(sortAvailable);
+                        while (selected.length < needed && others.length > 0 && tempDayOTCount < actualMaxOT) {
+                            const pickIdx = others.findIndex(n => !violatesConflict(n, shiftName, tempDayData, shifts));
+                            if (pickIdx === -1) break;
+                            const name = others.splice(pickIdx, 1)[0];
+                            selected.push({ name, isOT: true });
+                            recordAssignment(name, isNight, shiftName);
+                            tempDayOTCount++;
+                        }
+                    }
+
+                    // Bước 4: Vẫn thiếu -> cố nhét nhưng tuân thủ luật cấm
+                    if (selected.length < needed) {
+                        let emergency = names.filter(n =>
+                            !tempAssignedToday.has(n) && !selected.find(e => e.name === n) && !(isEarlyMorningShift && blockedForMorning.has(n))
+                        );
+                        shuffle(emergency);
+                        emergency.sort(sortAvailable);
+                        while (selected.length < needed && emergency.length > 0) {
+                            const pickIdx = emergency.findIndex(n => !violatesConflict(n, shiftName, tempDayData, shifts));
+                            if (pickIdx === -1) break; 
+                            
+                            const name = emergency.splice(pickIdx, 1)[0];
+                            selected.push({ name, isOT: false });
+                            tempAssignedToday.add(name);
+                            recordAssignment(name, isNight, shiftName);
+                        }
+                    }
+
+                    // Bước 5: Thừa slot -> để trống
+                    while (selected.length < needed) {
+                        selected.push({ name: '[Trống]', isOT: false, isEmpty: true });
+                    }
+                });
+
+                let emptyCount = 0;
+                Object.values(tempDayData.shifts).forEach(list => { emptyCount += list.filter(e => e.isEmpty).length; });
+
+                if (emptyCount < bestEmptyCount) {
+                    bestEmptyCount = emptyCount;
+                    bestDayData = tempDayData;
+                    bestAssignedStats = tempWorkStats;
+                    bestShiftTypeStats = tempShiftTypeStats;
+                    bestExactShiftStats = tempExactShiftStats;
+                }
+
+                if (emptyCount <= expectedEmpty) break;
+            }
+
+            workStats = bestAssignedStats;
+            shiftTypeStats = bestShiftTypeStats;
+            exactShiftStats = bestExactShiftStats;
+            let dayData = bestDayData;
+
+            nightWorkersPrevDay = new Set();
+            if (latestNightShiftName && dayData.shifts[latestNightShiftName]) {
+                dayData.shifts[latestNightShiftName].forEach(emp => {
+                    if (!emp.isEmpty) nightWorkersPrevDay.add(emp.name);
+                });
+            }
+
+            scheduleData.push(dayData);
+        });
+    }
+    renderAll();
+}
+
+// ─── TRANSPOSED renderAll: Ngày nằm ngang (header cố định), Tuần xếp dọc ───
+function renderAll() {
+    document.getElementById('scheduleSection').style.display = 'block';
+    const table = document.getElementById('schedule');
+    table.innerHTML = '';
+    if (!scheduleData.length) return;
+
+    const shifts = Object.keys(scheduleData[0].shifts);
+
+    // Lấy danh sách ngày gốc (T2, T3... không có W)
+    const dayLabels = Array.from(document.querySelectorAll('#dayCheckboxes input:checked')).map(i => i.value);
+    const numWeeks = parseInt(document.getElementById('numWeeks').value);
+    const daysPerWeek = dayLabels.length;
+
+    // HEADER ROW cố định: Ca làm việc | T2 | T3 | ... | CN
+    const thead = table.createTHead();
+    const hr = thead.insertRow();
+    const thShift = document.createElement('th');
+    thShift.innerText = 'Ca làm việc';
+    hr.appendChild(thShift);
+    dayLabels.forEach(dayLabel => {
+        const th = document.createElement('th');
+        th.innerText = dayLabel;
+        hr.appendChild(th);
+    });
+
+    const tbody = table.createTBody();
+
+    // Mỗi tuần là một nhóm hàng
+    for (let w = 0; w < numWeeks; w++) {
+        // Hàng tiêu đề tuần (gộp toàn bộ cột)
+        if (numWeeks > 1) {
+            const weekHeaderRow = tbody.insertRow();
+            const weekTd = weekHeaderRow.insertCell();
+            weekTd.colSpan = dayLabels.length + 1;
+            weekTd.innerText = `Tuần ${w + 1}`;
+            weekTd.style.cssText = `
+                background: var(--accent-glow);
+                color: var(--accent);
+                font-family: 'Syne', sans-serif;
+                font-weight: 700;
+                font-size: 0.78rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                padding: 8px 16px;
+                border-bottom: 1px solid var(--border);
+                text-align: left;
+            `;
+        }
+
+        // Với mỗi ca, tạo 1 hàng — các cột là từng ngày trong tuần đó
+        shifts.forEach(shiftKey => {
+            const row = tbody.insertRow();
+
+            // Cột đầu: tên ca
+            const tdShift = row.insertCell();
+            tdShift.innerText = shiftKey;
+
+            // Cột ngày: lấy đúng dayData của tuần w, ngày tương ứng
+            dayLabels.forEach((_, dayIdx) => {
+                const globalDayIdx = w * daysPerWeek + dayIdx;
+                const d = scheduleData[globalDayIdx];
+                const cell = row.insertCell();
+                if (!d) return;
+
+                (d.shifts[shiftKey] || []).forEach((empObj, eIdx) => {
+                    if (empObj.isEmpty) {
+                        const s = document.createElement('span');
+                        s.className = 'empty-slot';
+                        s.innerText = '—';
+                        cell.appendChild(s);
+                    } else {
+                        const chip = document.createElement('span');
+                        chip.className = 'emp-chip' + (empObj.isOT ? ' is-ot' : '');
+                        chip.innerText = empObj.name;
+                        chip.onclick = (e) => handleSwap(globalDayIdx, shiftKey, eIdx, e.currentTarget);
+                        cell.appendChild(chip);
+                    }
+                });
+            });
+        });
+    }
+
+    updateStats();
+}
+
+function handleSwap(dIdx, sKey, eIdx, target) {
+    if (!selectedForSwap) {
+        selectedForSwap = { dIdx, sKey, eIdx, target };
+        target.classList.add('selected');
+    } else {
+        const first = selectedForSwap;
+        const emp1 = scheduleData[first.dIdx].shifts[first.sKey][first.eIdx];
+        const emp2 = scheduleData[dIdx].shifts[sKey][eIdx];
+
+        scheduleData[first.dIdx].shifts[first.sKey][first.eIdx] = emp2;
+        scheduleData[dIdx].shifts[sKey][eIdx] = emp1;
+
+        let hasConflict = false;
+        if (!emp1.isEmpty && violatesConflict(emp1.name, sKey, scheduleData[dIdx], Object.keys(scheduleData[dIdx].shifts))) {
+            hasConflict = true;
+        }
+        if (!emp2.isEmpty && !hasConflict && violatesConflict(emp2.name, first.sKey, scheduleData[first.dIdx], Object.keys(scheduleData[first.dIdx].shifts))) {
+            hasConflict = true;
+        }
+
+        if (hasConflict) {
+            scheduleData[first.dIdx].shifts[first.sKey][first.eIdx] = emp1;
+            scheduleData[dIdx].shifts[sKey][eIdx] = emp2;
+            showMsg('❌ Lỗi: Cặp này bị cấm làm chung 1 buổi (Sáng/Tối).', 'error');
+        } else {
+            showMsg('✅ Đổi ca thành công.', 'success');
+        }
+
+        first.target.classList.remove('selected');
+        selectedForSwap = null;
+        renderAll();
+    }
+}
+
+function updateStats() {
+    const stats = {};
+    employeeNodes.forEach(i => { if (i.value.trim()) stats[i.value.trim()] = 0; });
+    scheduleData.forEach(d => {
+        Object.values(d.shifts).forEach(list => {
+            list.forEach(e => { if (!e.isEmpty && stats[e.name] !== undefined) stats[e.name]++; });
+        });
+    });
+
+    const entries = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+    const maxVal = entries.length ? entries[0][1] : 1;
+
+    document.getElementById('statsBadge').innerText = `${entries.length} nhân viên`;
+
+    const tbody = document.querySelector('#stats tbody');
+    tbody.innerHTML = '';
+    entries.forEach(([name, count]) => {
+        const row = tbody.insertRow();
+        row.insertCell().innerText = name;
+        row.insertCell().innerText = count + ' ca';
+        const barCell = row.insertCell();
+        const pct = maxVal > 0 ? (count / maxVal * 100).toFixed(1) : 0;
+        barCell.innerHTML = `
+            <div class="stat-bar-wrap">
+                <div class="stat-bar" style="width:${pct}%"></div>
+                <span style="font-size:0.72rem; color:var(--text-muted); font-family:'DM Mono',monospace">${pct}%</span>
+            </div>`;
+    });
+}
+
+function downloadCSV() {
+    if (!scheduleData.length) return;
+    const shifts = Object.keys(scheduleData[0].shifts);
+    const days = scheduleData.map(d => d.day);
+
+    let csv = '\uFEFF';
+    
+    csv += 'Ca làm việc,' + days.join(',') + '\n';
+    
+    shifts.forEach(shiftName => {
+        let row = [shiftName];
+        scheduleData.forEach(d => {
+            let names = d.shifts[shiftName]
+                .filter(e => !e.isEmpty)
+                .map(e => e.name)
+                .join(' - ');
+            row.push('"' + names + '"'); 
+        });
+        csv += row.join(',') + '\n';
+    });
+
+    let noteRow = ['NOTE'];
+    scheduleData.forEach(() => noteRow.push('""'));
+    csv += noteRow.join(',') + '\n';
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'AutoShift_Calendar.csv';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+}
+
+function downloadXLSX() {
+    if (!scheduleData.length) return;
+    const shifts = Object.keys(scheduleData[0].shifts);
+    const days = scheduleData.map(d => d.day);
+    const wb = XLSX.utils.book_new();
+
+    const schedRows = [];
+    
+    schedRows.push(['Ca làm việc', ...days]);
+    
+    schedRows.push(['Ca làm việc', ...days.map(() => '')]);
+
+    shifts.forEach(s => {
+        const row = [s];
+        scheduleData.forEach(d => {
+            row.push(
+                d.shifts[s]
+                .filter(e => !e.isEmpty)
+                .map(e => e.isOT ? e.name + ' (OT)' : e.name)
+                .join(', ')
+            );
+        });
+        schedRows.push(row);
+    });
+
+    schedRows.push(['NOTE', ...days.map(() => '')]);
+
+    const ws1 = XLSX.utils.aoa_to_sheet(schedRows);
+    
+    ws1['!cols'] = [{ wch: 15 }, ...days.map(() => ({ wch: 22 }))];
+
+    const range = XLSX.utils.decode_range(ws1['!ref']);
+    for (let R = 0; R <= range.e.r; R++) {
+        for (let C = 0; C <= range.e.c; C++) {
+            const addr = XLSX.utils.encode_cell({ r: R, c: C });
+            if (!ws1[addr]) ws1[addr] = { t: 's', v: '' };
+            
+            const isHeader = R === 0 || R === 1;
+            const isFirstCol = C === 0;
+            const isNoteRow = R === range.e.r;
+            const cellVal = String(ws1[addr].v || '');
+            const hasOT = cellVal.includes('(OT)');
+
+            ws1[addr].s = {
+                font: { 
+                    name: 'Arial', 
+                    sz: 10, 
+                    bold: isHeader || isFirstCol || isNoteRow,
+                    color: { rgb: hasOT ? 'C0162E' : (isHeader ? 'FFFFFF' : '1A1D2E') } 
+                },
+                fill: { 
+                    fgColor: { rgb: isHeader ? '8064A2' : (isNoteRow ? '00FFFF' : 'FFFFFF') } 
+                },
+                alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+                border: { 
+                    top: { style: 'thin', color: { rgb: '444444' } }, 
+                    bottom: { style: 'thin', color: { rgb: '444444' } }, 
+                    left: { style: 'thin', color: { rgb: '444444' } }, 
+                    right: { style: 'thin', color: { rgb: '444444' } } 
+                }
+            };
+        }
+    }
+    XLSX.utils.book_append_sheet(wb, ws1, 'Lịch làm việc');
+
+    const stats = {};
+    employeeNodes.forEach(i => { if (i.value.trim()) stats[i.value.trim()] = 0; });
+    scheduleData.forEach(d => {
+        Object.values(d.shifts).forEach(list => {
+            list.forEach(e => { if (!e.isEmpty && stats[e.name] !== undefined) stats[e.name]++; });
+        });
+    });
+    const sorted = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+    const maxStat = sorted.length ? sorted[0][1] : 1;
+
+    const statRows = [['Nhân viên', 'Tổng số ca', 'Tỷ lệ (%)']];
+    sorted.forEach(([name, count]) => { statRows.push([name, count, parseFloat(((count / maxStat) * 100).toFixed(1))]); });
+
+    const ws2 = XLSX.utils.aoa_to_sheet(statRows);
+    ws2['!cols'] = [{ wch: 20 }, { wch: 16 }, { wch: 14 }];
+
+    const r2 = XLSX.utils.decode_range(ws2['!ref']);
+    for (let R2 = 0; R2 <= r2.e.r; R2++) {
+        for (let C2 = 0; C2 <= r2.e.c; C2++) {
+            const addr = XLSX.utils.encode_cell({ r: R2, c: C2 });
+            if (!ws2[addr]) ws2[addr] = { t: 's', v: '' };
+            const isHeader = R2 === 0;
+            const isEven = R2 % 2 === 0;
+            ws2[addr].s = {
+                font: { name: 'Arial', sz: 10, bold: isHeader, color: { rgb: isHeader ? 'FFFFFF' : (C2 === 1 ? '009E94' : '1A1D2E') } },
+                fill: { fgColor: { rgb: isHeader ? '2C3E50' : (isEven ? 'F7F8FC' : 'FFFFFF') } },
+                alignment: { horizontal: C2 === 0 ? 'left' : 'center', vertical: 'center' },
+                border: { 
+                    top: { style: 'thin', color: { rgb: isHeader ? '444444' : 'DDDDDD' } }, 
+                    bottom: { style: 'thin', color: { rgb: isHeader ? '444444' : 'DDDDDD' } }, 
+                    left: { style: 'thin', color: { rgb: isHeader ? '444444' : 'DDDDDD' } }, 
+                    right: { style: 'thin', color: { rgb: isHeader ? '444444' : 'DDDDDD' } } 
+                }
+            };
+            if (!isHeader && C2 === 2) ws2[addr].z = '0.0"%"';
+        }
+    }
+    XLSX.utils.book_append_sheet(wb, ws2, 'Thống kê');
+    
+    XLSX.writeFile(wb, 'AutoShift_Calendar.xlsx');
+}
+
+window.onload = createEmployeeInputs;
+</script>
+</body>
+</html>
