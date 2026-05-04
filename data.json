@@ -1,13 +1,13 @@
 {
     "header": [
-        { "type": "link", "title": "Jquery Libraries", "icon": "fa fa-book", "url": "https://thanhphatit.github.io/jquery/dist/jquery.min.js", "target": "_blank" },
+        { "type": "link", "title": "Jquery Libraries", "icon": "fa fa-book", "url": "https://tools.itblognote.com/jquery/dist/jquery.min.js", "target": "_blank" },
         { 
             "type": "dropdown", 
             "title": "Bootstrap Libraries", 
             "icon": "fa fa-pie-chart", 
             "items": [
-                { "title": "v3", "url": "https://thanhphatit.github.io/bootstrap/3/css/bootstrap.min.css", "target": "_blank" },
-                { "title": "v4", "url": "https://thanhphatit.github.io/bootstrap/4/css/bootstrap.min.css", "target": "_blank" }
+                { "title": "v3", "url": "https://tools.itblognote.com/bootstrap/3/css/bootstrap.min.css", "target": "_blank" },
+                { "title": "v4", "url": "https://tools.itblognote.com/bootstrap/4/css/bootstrap.min.css", "target": "_blank" }
             ] 
         },
         { 
@@ -16,8 +16,8 @@
             "icon": "fa fa-feed", 
             "items": [
                 { "title": "v4-ICONS", "url": "https://fontawesome.com/v4/icons/", "target": "_blank" },
-                { "title": "v4", "url": "https://thanhphatit.github.io/font-awesome/4/css/font-awesome.min.css", "target": "_blank" },
-                { "title": "v5", "url": "https://thanhphatit.github.io/font-awesome/5/css/all.min.css", "target": "_blank" }
+                { "title": "v4", "url": "https://tools.itblognote.com/font-awesome/4/css/font-awesome.min.css", "target": "_blank" },
+                { "title": "v5", "url": "https://tools.itblognote.com/font-awesome/5/css/all.min.css", "target": "_blank" }
             ] 
         },
         { 
@@ -25,11 +25,11 @@
             "title": "Other Libraries", 
             "icon": "", 
             "items": [
-                { "title": "Clipboard.js", "url": "https://thanhphatit.github.io/clipboardjs/dist/clipboard.min.js", "target": "_blank" },
-                { "title": "Highlightjs", "url": "https://thanhphatit.github.io/highlightjs/src/highlight.min.js", "target": "_blank" },
-                { "title": "jQuery Timeago", "url": "https://thanhphatit.github.io/jquery-timeago/jquery.timeago.min.js", "target": "_blank" },
-                { "title": "Reading Time", "url": "https://thanhphatit.github.io/reading-time/src/readingTime.min.js", "target": "_blank" },
-                { "title": "Smart Photo", "url": "https://thanhphatit.github.io/smartphoto/js/jquery-smartphoto.min.js", "target": "_blank" }
+                { "title": "Clipboard.js", "url": "https://tools.itblognote.com/clipboardjs/dist/clipboard.min.js", "target": "_blank" },
+                { "title": "Highlightjs", "url": "https://tools.itblognote.com/highlightjs/src/highlight.min.js", "target": "_blank" },
+                { "title": "jQuery Timeago", "url": "https://tools.itblognote.com/jquery-timeago/jquery.timeago.min.js", "target": "_blank" },
+                { "title": "Reading Time", "url": "https://tools.itblognote.com/reading-time/src/readingTime.min.js", "target": "_blank" },
+                { "title": "Smart Photo", "url": "https://tools.itblognote.com/smartphoto/js/jquery-smartphoto.min.js", "target": "_blank" }
             ] 
         },
         { "type": "link", "title": "Deployment", "icon": "fa fa-code", "url": "deployment", "target": "_self" },
@@ -47,7 +47,7 @@
         { "type": "link", "title": "Contact", "icon": "fa fa-envelope-o", "url": "https://www.itblognote.com", "target": "_self" }
     ],
     "body": [
-        { "title": "Paint", "icon": "fa fa-paint-brush", "url": "https://thanhphatit.github.io/paint", "target": "_blank" },
+        { "title": "Paint", "icon": "fa fa-paint-brush", "url": "https://tools.itblognote.com/paint", "target": "_blank" },
         { "title": "HTML Beautifier", "icon": "glyphicon glyphicon-signal", "url": "kit/html-beautify", "target": "_blank" },
         { "title": "JS Beautifier", "icon": "glyphicon glyphicon-leaf", "url": "kit/js-beautifier", "target": "_blank" },
         { "title": "CSS Beautifier", "icon": "glyphicon glyphicon-cloud", "url": "kit/css-beautify", "target": "_blank" },
