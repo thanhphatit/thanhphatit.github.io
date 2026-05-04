@@ -2,7 +2,7 @@
 <html lang="vi">
 
 <head>
-    <title>Tools Center</title>
+    <title>Tools Online – Đặng Thành Phát</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
     <meta charset="UTF-8" />
     <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport' />
@@ -96,7 +96,24 @@
         .nav-icon-btn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
         
         .user-badge { display: none; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 8px 16px; background: rgba(99,102,241,0.1); color: var(--accent); border-radius: 20px; border: 1px solid rgba(99,102,241,0.2); margin-right: 10px;}
-        #login-btn-header { display: flex; font-size: 14px; font-weight: 600; padding: 8px 18px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; margin-right: 10px;}
+        
+        /* FIX CĂN GIỮA ICON NÚT ĐĂNG NHẬP */
+        #login-btn-header { 
+            display: flex; 
+            align-items: center; /* Căn giữa theo chiều dọc */
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            gap: 6px; /* Khoảng cách giữa icon và chữ */
+            font-size: 14px; 
+            font-weight: 600; 
+            padding: 8px 18px; 
+            background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
+            color: #fff; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-right: 10px;
+        }
         #login-btn-header:hover { box-shadow: 0 5px 15px rgba(99,102,241,0.3); transform: translateY(-2px); }
 
         /* HERO & SEARCH */
@@ -108,11 +125,11 @@
         #search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99,102,241,0.2); }
         .counter-row { text-align: center; margin-bottom: 50px; }
         #tool-counter { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); padding: 8px 20px; border-radius: 999px; }
+        #tool-counter b { color: var(--accent); font-size: 16px; }
 
         /* GRID */
         .tools-section { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; }
         #tools-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
-        
         .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: relative; transition: 0.3s; opacity: 0; animation: fadeUp 0.5s ease forwards; }
         .tool-card:hover { transform: translateY(-8px); border-color: rgba(99,102,241,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 2px rgba(99,102,241,0.1); }
         body.light .tool-card:hover { box-shadow: 0 20px 40px rgba(99,102,241,0.1); }
@@ -151,7 +168,7 @@
         .input-group-custom i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         .input-group-custom input { width: 100%; padding: 14px 14px 14px 45px; background: var(--bg); border: 2px solid var(--border); border-radius: 12px; color: var(--text); font-family: var(--font-body); font-size: 14px; outline: none; transition: 0.3s; }
         .input-group-custom input:focus { border-color: var(--accent); }
-        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.3s; }
+        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;}
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
         .login-error { color: #ef4444; font-size: 13px; margin-top: 15px; display: none; font-weight: 500;}
 
@@ -182,7 +199,8 @@
             <ul class="nav-links" id="dynamic-nav-list"></ul>
 
             <div class="nav-right">
-                <button id="login-btn-header"><i class="fa fa-sign-in" style="margin-right: 6px;"></i> Đăng Nhập</button>
+                <!-- NÚT ĐĂNG NHẬP ĐÃ ĐƯỢC CĂN GIỮA ICON -->
+                <button id="login-btn-header"><i class="fa fa-sign-in"></i> Đăng Nhập</button>
                 <div class="user-badge" id="user-badge-info"></div>
                 <button class="nav-icon-btn" id="logout-btn" title="Đăng xuất" style="display: none; color: #ef4444;"><i class="fa fa-sign-out"></i></button>
                 <button class="nav-icon-btn" id="theme-toggle-btn" title="Giao diện Sáng/Tối"><i class="fa fa-moon-o" id="theme-icon"></i></button>
@@ -193,7 +211,7 @@
     <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-badge"><i class="fa fa-rocket"></i> Nhanh chóng & Tiện lợi</div>
-        <h1>Tools Center<br>DevOps Engineer</h1>
+        <h1>Không gian Công cụ<br>Dành cho Lập trình viên</h1>
         <div class="search-wrap">
             <i class="fa fa-search"></i>
             <input type="text" id="search-input" placeholder="Tìm kiếm công cụ... (vd: JSON, Minify, Decode)">
@@ -281,7 +299,7 @@
             let allTools = [];
             let authConfig = null;
             let siteData = null;
-            let pendingUrl = null; // Lưu URL đang muốn vào trước khi bị bắt login
+            let pendingUrl = null; 
 
             // UI Elements
             const loginModal = document.getElementById('login-modal');
@@ -302,12 +320,12 @@
 
                     document.getElementById('app-title-header').innerText = authConfig.settings.app_name || "Tools Center";
 
-                    checkSession(); // Cập nhật Header UI (Login/Logout)
+                    checkSession(); 
                     
                     allTools = siteData.body || [];
                     renderNavbar(siteData.header || []);
                     renderFooter(siteData.footer || {});
-                    renderTools(allTools); // HIỂN THỊ TẤT CẢ TOOL NGAY TỪ ĐẦU
+                    renderTools(allTools); 
                 } catch (err) {
                     document.getElementById('tools-container').innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Lỗi tải dữ liệu. Vui lòng mở bằng Web Server (Localhost).</div>`;
                 }
@@ -355,7 +373,6 @@
             loginBtnHeader.addEventListener('click', () => openLoginModal());
             document.getElementById('close-modal-btn').addEventListener('click', closeLoginModal);
             
-            // Xử lý Form Login
             document.getElementById('login-form').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const u = document.getElementById('username').value.trim();
@@ -366,11 +383,10 @@
                     const expiryTime = Date.now() + (authConfig.settings.session_hours * 60 * 60 * 1000);
                     localStorage.setItem('auth_session', JSON.stringify({ user: validUser, expiry: expiryTime }));
                     
-                    checkSession(); // Update UI
-                    renderTools(allTools); // Render lại lưới để mở khóa
+                    checkSession(); 
+                    renderTools(allTools); 
                     closeLoginModal();
                     
-                    // Nếu đăng nhập thành công vì bấm vào tool, chuyển hướng ngay
                     if (pendingUrl) {
                         if (checkAccess(validUser, pendingUrl)) {
                             window.open(pendingUrl, '_blank');
@@ -387,7 +403,7 @@
             logoutBtn.addEventListener('click', () => {
                 localStorage.removeItem('auth_session');
                 checkSession();
-                renderTools(allTools); // Gắn khóa lại
+                renderTools(allTools); 
             });
 
             // ==========================================
@@ -395,7 +411,7 @@
             // ==========================================
             function checkAccess(user, url) {
                 if (!user) return false;
-                if (user.access.tools.includes("*")) return true; // Admin
+                if (user.access.tools.includes("*")) return true; 
                 return user.access.tools.includes(url);
             }
 
@@ -411,12 +427,11 @@
                     const user = getCurrentUser();
                     if (!user) {
                         e.preventDefault();
-                        openLoginModal(url); // Bắt login
+                        openLoginModal(url); 
                     } else if (!checkAccess(user, url)) {
                         e.preventDefault();
                         alert("Tài khoản của bạn không có quyền truy cập công cụ này!");
                     }
-                    // Nếu có quyền, tự động cho phép thẻ a nhảy link bình thường
                 }
             });
 
@@ -454,7 +469,6 @@
                     const isProtected = protectedList.includes(t.url);
                     const hasAccess = user ? checkAccess(user, t.url) : false;
                     
-                    // Nếu tool bị protect và người dùng không có quyền -> Gắn thẻ Khóa
                     let lockHtml = '';
                     if (isProtected && !hasAccess) {
                         lockHtml = `<div class="lock-badge" title="Yêu cầu đăng nhập có quyền"><i class="fa fa-lock"></i></div>`;
@@ -489,7 +503,7 @@
                 renderTools(q ? allTools.filter(t => t.title.toLowerCase().includes(q)) : allTools);
             });
 
-            loadData(); // Khởi chạy
+            loadData(); 
         })();
     </script>
 </body>
