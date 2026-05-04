@@ -4,9 +4,6 @@
         "app_name": "Tools",
         "protected_tools": [
             "*"
-            // "kit/random-password-generator",
-            // "cyberchef/",
-            // "codec"
         ]
     },
     "roles": {
