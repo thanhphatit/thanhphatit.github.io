@@ -1,0 +1,36 @@
+{
+    "settings": {
+        "session_hours": 8,
+        "app_name": "Tools",
+        "protected_tools": [
+            "kit/random-password-generator",
+            "cyberchef/",
+            "codec"
+        ]
+    },
+    "roles": {
+        "admin": { "label": "Administrator", "description": "Full access to everything" },
+        "dev": { "label": "Developer", "description": "Access to specific tools" }
+    },
+    "users": [
+        {
+            "username": "admin",
+            "password": "Admin@2026",
+            "role": "admin",
+            "name": "Quản trị viên",
+            "access": { "tools": ["*"] }
+        },
+        {
+            "username": "dev.team",
+            "password": "Dev@2026",
+            "role": "dev",
+            "name": "Nhóm Lập trình",
+            "access": {
+                "tools": [
+                    "kit/random-password-generator",
+                    "codec"
+                ]
+            }
+        }
+    ]
+}

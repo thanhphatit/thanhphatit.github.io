@@ -1,533 +1,496 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
-    <title>Tools Online</title>
-    <meta content='public' https-equiv='Cache-Control' />
-    <meta content='text/javascript' https-equiv='Content-Script-Type' />
-    <meta content='text/css' https-equiv='Content-Style-Type' />
+    <title>Tools Center</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
     <meta charset="UTF-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport' />
+    
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="194x194" href="/assets/images/favicon-194x194.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
-    <link rel="manifest" href="/assets/site.webmanifest">
-    <link rel="mask-icon" href="/assets/images/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#777876">
-    <meta name="msapplication-TileImage" content="https://thanhphatit.github.io/assets/images/mstile-144x144.png">
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
-    <meta content='#333333' name='theme-color' />
-    <meta content='#333333' name='msapplication-navbutton-color' />
-    <meta content='#333333' name='apple-mobile-web-app-status-bar-style' />
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport' />
-    <meta content='IE=edge' http-equiv='X-UA-Compatible' />
-    <meta content='https://thanhphatit.github.io/assets/images/1.jpg' property='og:image' />
-    <meta content='https://thanhphatit.github.io/assets/images/1.jpg' name='twitter:image:src' />
-    <meta content='summary_large_image' name='twitter:card' />
-    <meta content='@thanhphatit' name='twitter:site' />
-    <meta content='@thanhphatit' name='twitter:creator' />
-    <meta content='https://thanhphatit.github.io/' name='twitter:domain' />
-    <meta content='https://thanhphatit.github.io/' name='twitter:url' />
-    <meta content='Đặng Thành Phát' name='twitter:title' />
-    <meta content='Đặng Thành Phát' name='Author' />
-    <meta content='general' name='rating' />
-    <meta content='VN-HN' name='geo.region' />
-    <meta content='VN' name='geo.country' />
-    <meta content='1 days' name='revisit' />
-    <meta content='1 days' name='revisit-after' />
-    <meta content='document' name='resource-type' />
-    <meta content='global' name='distribution' />
-    <meta content='all' name='audience' />
-    <meta content='vi_VN' property='og:locale' />
-    <meta content='en_US' property='og:locale:alternate' />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/dist/bs3/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/dist/pace/pace-theme.css">
-    <link rel="stylesheet" type="text/css" href="/dist/fa/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/css.css">
+
     <script src="/dist/jquery.min.js"></script>
     <script src="/dist/pace/pace.min.js"></script>
     <script src="/dist/SmoothScroll.min.js"></script>
     <script src="/dist/bs3/js/bootstrap.min.js"></script>
-    <script src="/assets/js/js.js"></script>
-    <script async="async" src="/assets/js/analytics.js?id=UA-140915771-1"></script>
-    <script type="text/javascript">
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'UA-140915771-1');
-        function killCopy(e) {
-            return false
-        }
-        function reEnable() {
-            return true
-        }
-        document.onselectstart = new Function(“return false”)
 
-        if (window.sidebar) {
-            document.onmousedown = killCopy
-            document.onclick = reEnable
-        }
-    </script>
     <style>
-        body {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -o-user-select: none;
-            user-select: none;
+        /* ============================================================
+           CSS CORE & VARIABLES
+           ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent: #6366f1; --accent-2: #ec4899; --accent-3: #06b6d4;
+            --bg: #09090b; --surface: #111113; --surface-hover: #1c1c1f;
+            --border: rgba(255,255,255,0.08);
+            --text: #ffffff; --text-muted: #a1a1aa;
+            --font-display: 'Sora', sans-serif; --font-body: 'DM Sans', sans-serif;
+            --nav-h: 75px;
         }
+
+        body.light {
+            --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+            --border: rgba(0,0,0,0.08);
+            --text: #0f172a; --text-muted: #64748b;
+        }
+
+        body {
+            font-family: var(--font-body) !important;
+            background: var(--bg) !important;
+            color: var(--text) !important;
+            transition: background 0.3s, color 0.3s;
+            -webkit-user-select: none; user-select: none;
+            overflow-x: hidden; padding-top: var(--nav-h);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; margin: 0; padding: 0; }
+
+        /* HEADER */
+        .app-header {
+            position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+            background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border); z-index: 1050; display: flex; align-items: center; transition: 0.3s;
+        }
+        body.light .app-header { background: rgba(255, 255, 255, 0.9); }
+        .nav-inner { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--text); margin-right: 30px; text-decoration: none !important; }
+        .nav-brand-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        
+        .nav-links { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .nav-links li { position: relative; }
+        .nav-links a, .nav-links .dropdown-toggle-btn {
+            display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px;
+            font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; background: none; border: none; text-decoration: none !important; transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links .dropdown-toggle-btn:hover, .nav-links li.open > .dropdown-toggle-btn { background: var(--surface-hover); color: var(--text); }
+        
+        .custom-dropdown-menu {
+            display: none; position: absolute; top: calc(100% + 10px); left: 0; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 8px; min-width: 220px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 1100;
+        }
+        body.light .custom-dropdown-menu { box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .nav-links li.open .custom-dropdown-menu { display: block; }
+        .custom-dropdown-menu li a { display: block; padding: 10px 16px; border-radius: 10px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .custom-dropdown-menu li a:hover { background: var(--surface-hover); color: var(--text); transform: translateX(5px); }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+        .nav-icon-btn {
+            width: 42px; height: 42px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 18px;
+        }
+        .nav-icon-btn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+        
+        .user-badge { display: none; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 8px 16px; background: rgba(99,102,241,0.1); color: var(--accent); border-radius: 20px; border: 1px solid rgba(99,102,241,0.2); margin-right: 10px;}
+        #login-btn-header { display: flex; font-size: 14px; font-weight: 600; padding: 8px 18px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; margin-right: 10px;}
+        #login-btn-header:hover { box-shadow: 0 5px 15px rgba(99,102,241,0.3); transform: translateY(-2px); }
+
+        /* HERO & SEARCH */
+        .hero { padding: 60px 24px 40px; text-align: center; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-family: var(--font-display); font-size: clamp(36px, 6vw, 60px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; background: linear-gradient(to right, #6366f1, #ec4899, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .search-wrap { max-width: 600px; margin: 30px auto 20px; position: relative; }
+        .search-wrap .fa-search { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; pointer-events: none; }
+        #search-input { width: 100%; padding: 18px 20px 18px 54px; background: var(--surface); border: 2px solid var(--border); border-radius: 20px; color: var(--text); font-size: 16px; font-weight: 500; outline: none; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99,102,241,0.2); }
+        .counter-row { text-align: center; margin-bottom: 50px; }
+        #tool-counter { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); padding: 8px 20px; border-radius: 999px; }
+
+        /* GRID */
+        .tools-section { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; }
+        #tools-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+        
+        .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: relative; transition: 0.3s; opacity: 0; animation: fadeUp 0.5s ease forwards; }
+        .tool-card:hover { transform: translateY(-8px); border-color: rgba(99,102,241,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 2px rgba(99,102,241,0.1); }
+        body.light .tool-card:hover { box-shadow: 0 20px 40px rgba(99,102,241,0.1); }
+        .tool-card a { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; gap: 18px; text-decoration: none !important; min-height: 180px; }
+        
+        .tool-icon-wrap { width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(236,72,153,0.15)); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--accent); transition: 0.4s; border: 1px solid rgba(255,255,255,0.05); }
+        .tool-card:hover .tool-icon-wrap { transform: scale(1.2) rotate(8deg); background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #ffffff; box-shadow: 0 10px 20px rgba(236,72,153,0.3); }
+        .tool-name { font-size: 16px; font-weight: 700; color: var(--text); text-align: center; }
+
+        /* Biểu tượng khóa cho Tool VIP */
+        .lock-badge { position: absolute; top: 15px; right: 15px; background: rgba(239, 68, 68, 0.1); color: #ef4444; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .tool-card:hover .lock-badge { background: #ef4444; color: #fff; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ============================================================
+           LOGIN MODAL (POPUP)
+           ============================================================ */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 9999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .login-box {
+            background: var(--surface); padding: 40px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            width: 100%; max-width: 400px; text-align: center; transform: scale(0.9); transition: transform 0.3s ease; position: relative;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay.active .login-box { transform: scale(1); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 20px; color: var(--text-muted); cursor: pointer; background: none; border: none; }
+        .close-modal:hover { color: #ef4444; }
+        
+        .login-icon { font-size: 40px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+        .login-box h2 { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .login-box p { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+        .input-group-custom { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-group-custom i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .input-group-custom input { width: 100%; padding: 14px 14px 14px 45px; background: var(--bg); border: 2px solid var(--border); border-radius: 12px; color: var(--text); font-family: var(--font-body); font-size: 14px; outline: none; transition: 0.3s; }
+        .input-group-custom input:focus { border-color: var(--accent); }
+        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
+        .login-error { color: #ef4444; font-size: 13px; margin-top: 15px; display: none; font-weight: 500;}
+
+        /* FOOTER & BUTTONS */
+        footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; background: var(--surface); }
+        .footer-socials { display: flex; justify-content: center; gap: 12px; margin-bottom: 24px; }
+        .footer-socials a { width: 44px; height: 44px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 18px; transition: 0.3s; }
+        .footer-socials a:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-5px); }
+        .footer-copy { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .footer-copy a { color: var(--accent); font-weight: 600; }
+
+        #BackToTop { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), var(--accent-3)); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; cursor: pointer; box-shadow: 0 10px 25px rgba(99,102,241,0.4); opacity: 0; pointer-events: none; transition: 0.3s; border: none; z-index: 900; }
+        #BackToTop.visible { opacity: 1; pointer-events: all; }
+        #BackToTop:hover { transform: translateY(-5px) scale(1.05); }
     </style>
-    <script language="JavaScript">
-        window.onload = function () {
-            document.addEventListener("contextmenu", function (e) {
-                e.preventDefault();
-            }, false);
-            document.addEventListener("keydown", function (e) {
-                //document.onkeydown = function(e) {
-                // "I" key
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
-                    disabledEvent(e);
-                }
-                // "J" key
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
-                    disabledEvent(e);
-                }
-                // "S" key + macOS
-                if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                    disabledEvent(e);
-                }
-                // "U" key
-                if (e.ctrlKey && e.keyCode == 85) {
-                    disabledEvent(e);
-                }
-                // "F12" key
-                if (event.keyCode == 123) {
-                    disabledEvent(e);
-                }
-            }, false);
-
-            function disabledEvent(e) {
-                if (e.stopPropagation) {
-                    e.stopPropagation();
-                } else if (window.event) {
-                    window.event.cancelBubble = true;
-                }
-                e.preventDefault();
-                return false;
-            }
-        };
-    </script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169293538-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-169293538-1');
-    </script>
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="https://thanhphatit.github.io"><i class="fa fa-gears"></i></a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="https://thanhphatit.github.io/jquery/dist/jquery.min.js" target="blank"><i
-                                class="fa fa-book"></i> Jquery Libraries</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false"><i class="fa fa-pie-chart"></i> Bootstrap Libraries<span
-                                class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="https://thanhphatit.github.io/bootstrap/3/css/bootstrap.min.css"
-                                    target="blank">v3</a></li>
-                            <li><a href="https://thanhphatit.github.io/bootstrap/4/css/bootstrap.min.css"
-                                    target="blank">v4</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false"><i class="fa fa-feed"></i> FontAwesome Libraries<span
-                                class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="https://fontawesome.com/v4/icons/" target="blank">v4-ICONS</a></li>
-                            <li><a href="https://thanhphatit.github.io/font-awesome/4/css/font-awesome.min.css"
-                                    target="blank">v4</a></li>
-                            <li><a href="https://thanhphatit.github.io/font-awesome/5/css/all.min.css"
-                                    target="blank">v5</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false">Other Libraries<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="https://thanhphatit.github.io/clipboardjs/dist/clipboard.min.js"
-                                    target="blank">Clipboard.js</a></li>
-                            <li><a href="https://thanhphatit.github.io/highlightjs/src/highlight.min.js"
-                                    target="blank">Highlightjs</a></li>
-                            <li><a href="https://thanhphatit.github.io/jquery-timeago/jquery.timeago.min.js"
-                                    target="blank">jQuery Timeago</a></li>
-                            <li><a href="https://thanhphatit.github.io/reading-time/src/readingTime.min.js"
-                                    target="blank">Reading Time</a></li>
-                            <li><a href="https://thanhphatit.github.io/smartphoto/js/jquery-smartphoto.min.js"
-                                    target="blank">Smart Photo</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="deployment"><i class="fa fa-code"></i> Deployment</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false">WZT<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="page/techbench-dump">TechBench Dump</a></li>
-                            <li><a href="page/msdn-info">MSDN Info</a></li>
-                            <li><a href="page/sha1-checksum">SHA1 Checksum</a></li>
-                            <li><a href="page/unified-update-platform">UUP Dump</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="https://www.itblognote.com"><i class="fa fa-envelope-o"></i> Contact</a></li>
-                    <li><a href="https://thanhphatit.github.io/paint"><i class="fa fa-paint-brush"></i> Paint</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div style="clear: both;margin: 2em 0"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/html-beautify" target="_blank"><i
-                            class="glyphicon glyphicon-signal"></i><span class="tool-footer">HTML Beautifier</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/js-beautifier" target="_blank"><i
-                            class="glyphicon glyphicon-leaf"></i><span class="tool-footer">JS Beautifier</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/css-beautify" target="_blank"><i
-                            class="glyphicon glyphicon-cloud"></i><span class="tool-footer">CSS Beautifier</span></a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/html-minifier" target="_blank"><i
-                            class="glyphicon glyphicon-minus-sign"></i><span class="tool-footer">HTML
-                            Minifier</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/js-minify" target="_blank"><i
-                            class="glyphicon glyphicon-tint"></i><span class="tool-footer">JS Minifier</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/css-minifier" target="_blank"><i
-                            class="glyphicon glyphicon-star"></i><span class="tool-footer">CSS Minifier</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/html-converter" target="_blank"><i
-                            class="glyphicon glyphicon-share-alt"></i></i><span class="tool-footer">HTML
-                            Converter</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/json-beautify" target="_blank"><i
-                            class="glyphicon glyphicon-record"></i><span class="tool-footer">JSON Beautifier</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/json-minify" target="_blank"><i
-                            class="glyphicon glyphicon-download-alt"></i><span class="tool-footer">JSON
-                            Minifier</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/html-unescape" target="_blank"><i
-                            class="glyphicon glyphicon-list"></i><span class="tool-footer">HTML Unescape</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/json-validate" target="_blank"><i
-                            class="glyphicon glyphicon-ok"></i><span class="tool-footer">JSON Validate</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/json-escape" target="_blank"><i
-                            class="glyphicon glyphicon-eject"></i><span class="tool-footer">JSON Escape</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/json-unescape" target="_blank"><i
-                            class="glyphicon glyphicon-zoom-in"></i><span class="tool-footer">JSON Unescape</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/xml-beautify" target="_blank"><i
-                            class="glyphicon glyphicon-object-align-bottom"></i><span class="tool-footer">XML
-                            Beautifier</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/xml-minify" target="_blank"><i
-                            class="glyphicon glyphicon-minus"></i><span class="tool-footer">XML Minifier</span></a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/image-to-base64" target="_blank"><i
-                            class="glyphicon glyphicon-book"></i><span class="tool-footer">Image to Base64</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/viet-chu-nguoc" target="_blank"><i
-                            class="glyphicon glyphicon-download"></i><span class="tool-footer">Viết chữ ngược</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/chu-thuong-chu-hoa" target="_blank"><i
-                            class="glyphicon glyphicon-refresh"></i><span class="tool-footer">chữ thường &gt; CHỮ
-                            HOA</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/chu-hoa-chu-thuong" target="_blank"><i
-                            class="glyphicon glyphicon-refresh"></i><span class="tool-footer">CHỮ HOA &gt; chữ
-                            thường</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/xoa-dau-tieng-viet" target="_blank"><i
-                            class="glyphicon glyphicon-remove-circle"></i><span class="tool-footer">Xóa dấu Tiếng
-                            Việt</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/remove-line-breaks" target="_blank"><i
-                            class="glyphicon glyphicon-remove-sign"></i><span class="tool-footer">Remove Line
-                            Breaks</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/random-sentences" target="_blank"><i
-                            class="glyphicon glyphicon-grain"></i><span class="tool-footer">Random Sentences</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/base64-converter" target="_blank"><i
-                            class="glyphicon glyphicon-stop"></i><span class="tool-footer">Base64 Converter</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper"><a href="kit/email-html-code" target="_blank"><i
-                            class="glyphicon glyphicon-envelope"></i><span class="tool-footer">Email HTML
-                            Code</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="tool-wrapper">
-                    <a href="kit/encode-url" " target=" _blank"><i
-                            class="glyphicon glyphicon-resize-horizontal"></i><span class="tool-footer">Encode
-                            URL</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/random-password-generator" target="_blank"><i
-                            class="glyphicon glyphicon-lock "></i><span class="tool-footer">Random Password Generator
-                        </span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/fontawesome-4-7-cheatsheet" target="_blank"><i
-                            class="glyphicon glyphicon-flag "></i><span class="tool-footer">FontAwesome</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/heart-maker" target="_blank"><i
-                            class="glyphicon glyphicon-heart "></i><span class="tool-footer">Heart Maker</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/upload-images" target="_blank"><i
-                            class="glyphicon glyphicon-picture "></i><span class="tool-footer">Upload Image</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/direct-link-generator" target="_blank"><i
-                            class="glyphicon glyphicon-cog "></i><span class="tool-footer">Direct Link
-                            Generator</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="/kit/color-picker" target="_blank"><i
-                            class="glyphicon glyphicon-send"></i><span class="tool-footer">Color Picker</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/javascript-obfuscator" target="_blank"><i
-                            class="glyphicon glyphicon-qrcode"></i><span class="tool-footer">JS Obfuscator</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/random-json" target="_blank"><i
-                            class="glyphicon glyphicon-move"></i><span class="tool-footer">Random JSON</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/random-xml" target="_blank"><i
-                            class="glyphicon glyphicon-fire"></i><span class="tool-footer">Random XML</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/binary-converter" target="_blank"><i
-                            class="fa fa-cube"></i><span class="tool-footer">Binary Converter</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/box-shadow" target="_blank"><i
-                            class="fa fa-book"></i><span class="tool-footer">Box Shadow Generator</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/character-counter" target="_blank"><i
-                            class="fa fa-indent"></i><span class="tool-footer">Character Counter</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/color-converter" target="_blank"><i
-                            class="fa fa-mouse-pointer"></i><span class="tool-footer">Color Converter</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/share-link" target="_blank"><i
-                            class="fa fa-link"></i><span class="tool-footer">Share link</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/rawgit" target="_blank"><i class="fa fa-github"></i><span
-                            class="tool-footer">RawGit</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/staticaly" target="_blank"><i
-                            class="fa fa-github"></i><span class="tool-footer">Staticaly</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/download-tools" target="_blank"><i
-                            class="fa fa-download"></i><span class="tool-footer">Download Tools</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/qrcode" target="_blank"><i class="fa fa-qrcode"></i><span
-                            class="tool-footer">QR Code</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="codec" target="_blank"><i class="fa fa-lock"></i><span
-                            class="tool-footer">Encrypt/Decrypt</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/tpit-symmetry" target="_blank"><i
-                            class="fa fa-user-secret"></i><span class="tool-footer">Encrypt TPIT Symmetry</span></a>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="compress-images" target="_blank"><i class="fa fa-image"></i><span
-                            class="tool-footer">Compress Images</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="draw-diagrams" target="_blank"><i class="fa fa-pencil"></i><span
-                            class="tool-footer">Draw IO</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="crontab-guru" target="_blank"><i
-                            class="fa fa-calendar-times-o"></i><span class="tool-footer">Crontab</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="editor.md/en" target="_blank"><i
-                            class="fa fa-pencil-square-o"></i><span class="tool-footer">Editor MD</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="random-password-generator/" target="_blank"><i
-                            class="fa fa-key"></i><span class="tool-footer">Random Password Generator</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="cyberchef/" target="_blank"><i class="fa fa-code"></i><span
-                            class="tool-footer">CyberChef</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/case-converter/" target="_blank"><i
-                            class="glyphicon glyphicon-refresh"></i><span class="tool-footer">Case Converter</span></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/random-picker/" target="_blank"><i class="fa fa-random"></i><span
-                            class="tool-footer">Random Picker</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="vietnam-address/" target="_blank"><i
-                            class="fa fa-map-marker"></i><span class="tool-footer">Vietnam Address</span></a></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="image-resizer/" target="_blank"><i class="fa fa-arrows"></i><span
-                            class="tool-footer">Image Resizer</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/auto-shift/" target="_blank"><i
-                            class="fa fa-calendar-check-o"></i><span class="tool-footer">Auto Shift</span></a></div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 ">
-                <div class="tool-wrapper"><a href="kit/pixelvoice/" target="_blank"><i
-                            class="fa fa-file-image-o"></i><span class="tool-footer">Pixel Voice</span></a></div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <footer class="footer-bottom ">
-        <ul class="footer-social ">
-            <li><a href="https://twitter.com/thanhphatit" title="Twitter " target="blank "><i
-                        class="fa fa-twitter "></i></a></li>
-            <li><a href="https://www.facebook.com/YukiThanhPhat/" title="Facebook " target="blank "><i
-                        class="fa fa-facebook "></i></a></li>
-            <li><a href="https://www.instagram.com/zyukiz/" title="Instagram " target="blank "><i
-                        class="fa fa-instagram "></i></a></li>
-            <li><a href="https://www.youtube.com/channel/UCTTPkH5yI_B5Hr1u8030w3A?view_as=subscriber" title="Youtube "
-                    target="blank "><i class="fa fa-youtube"></i></a></li>
-        </ul>
-        <hr />
-        <div class="copyright-container ">
-            <p class="text-center ">Copyright ©
-                <script type="text/javascript ">
-                document.write(new Date().getFullYear())
-                </script> by <a href="https://www.itblognote.com/">Thành Phát IT</a>
-            </p>
-        </div>
-        <hr />
-    </footer>
-    <a class='waves-effect waves-light ripple' id='BackToTop'><i class='fa fa-angle-up'></i></a>
-    <a class='waves-effect waves-light ripple' href='page/analytics.html' id='analytics' title="Google Analytics "><i
-            class='fa fa-bar-chart-o'></i></a>
-</body>
 
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="nav-inner">
+            <a class="nav-brand" href="#">
+                <div class="nav-brand-icon"><i class="fa fa-gears"></i></div>
+                <span id="app-title-header">Tools Center</span>
+            </a>
+
+            <ul class="nav-links" id="dynamic-nav-list"></ul>
+
+            <div class="nav-right">
+                <button id="login-btn-header"><i class="fa fa-sign-in" style="margin-right: 6px;"></i> Đăng Nhập</button>
+                <div class="user-badge" id="user-badge-info"></div>
+                <button class="nav-icon-btn" id="logout-btn" title="Đăng xuất" style="display: none; color: #ef4444;"><i class="fa fa-sign-out"></i></button>
+                <button class="nav-icon-btn" id="theme-toggle-btn" title="Giao diện Sáng/Tối"><i class="fa fa-moon-o" id="theme-icon"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-badge"><i class="fa fa-rocket"></i> Nhanh chóng & Tiện lợi</div>
+        <h1>Tools Center<br>DevOps Engineer</h1>
+        <div class="search-wrap">
+            <i class="fa fa-search"></i>
+            <input type="text" id="search-input" placeholder="Tìm kiếm công cụ... (vd: JSON, Minify, Decode)">
+        </div>
+        <div class="counter-row">
+            <div id="tool-counter"><i class="fa fa-cubes"></i> Đang tải dữ liệu...</div>
+        </div>
+    </section>
+
+    <!-- LƯỚI CÔNG CỤ -->
+    <section class="tools-section">
+        <div id="tools-container"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <ul class="footer-socials" id="dynamic-footer-social"></ul>
+        <p class="footer-copy" id="dynamic-copyright"></p>
+    </footer>
+
+    <button id="BackToTop" title="Lên đầu trang"><i class="fa fa-arrow-up"></i></button>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="login-box">
+            <button class="close-modal" id="close-modal-btn"><i class="fa fa-times"></i></button>
+            <i class="fa fa-shield login-icon"></i>
+            <h2>Hệ Thống Nội Bộ</h2>
+            <p>Vui lòng đăng nhập để truy cập công cụ bị khóa</p>
+            
+            <form id="login-form">
+                <div class="input-group-custom">
+                    <i class="fa fa-user"></i>
+                    <input type="text" id="username" placeholder="Tên đăng nhập (vd: admin, dev.team)" required autocomplete="off">
+                </div>
+                <div class="input-group-custom">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="password" placeholder="Mật khẩu" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn-login"><i class="fa fa-sign-in"></i> Xác Nhận Truy Cập</button>
+                <div id="login-error" class="login-error"><i class="fa fa-exclamation-circle"></i> Sai tài khoản hoặc mật khẩu!</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC (RBAC - PROTECTED TOOLS) -->
+    <script>
+        (function () {
+            // Chống Copy / F12
+            document.addEventListener("contextmenu", e => e.preventDefault(), false);
+            document.addEventListener("keydown", function (e) {
+                const block = ((e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) || (e.ctrlKey && e.keyCode === 85) || e.keyCode === 123);
+                if (block) { e.stopPropagation(); e.preventDefault(); return false; }
+            }, false);
+
+            // Giao diện (Theme, Dropdown, BackToTop)
+            const themeBtn = document.getElementById('theme-toggle-btn');
+            const themeIcon = document.getElementById('theme-icon');
+            function applyTheme(mode) {
+                if (mode === 'light') { document.body.classList.add('light'); themeIcon.className = 'fa fa-sun-o'; } 
+                else { document.body.classList.remove('light'); themeIcon.className = 'fa fa-moon-o'; }
+            }
+            applyTheme(localStorage.getItem('theme') || 'dark');
+            themeBtn.addEventListener('click', () => {
+                const next = document.body.classList.contains('light') ? 'dark' : 'light';
+                localStorage.setItem('theme', next); applyTheme(next);
+            });
+
+            const backBtn = document.getElementById('BackToTop');
+            window.addEventListener('scroll', () => backBtn.classList.toggle('visible', window.scrollY > 300));
+            backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            document.addEventListener('click', function (e) {
+                const toggle = e.target.closest('.dropdown-toggle-btn');
+                if (toggle) {
+                    e.preventDefault(); const li = toggle.closest('li'); const wasOpen = li.classList.contains('open');
+                    document.querySelectorAll('.nav-links li.open').forEach(x => x.classList.remove('open'));
+                    if (!wasOpen) li.classList.add('open');
+                } else { document.querySelectorAll('.nav-links li.open').forEach(x => x.classList.remove('open')); }
+            });
+
+            // ==========================================
+            // LOGIC DATA & PHÂN QUYỀN
+            // ==========================================
+            let allTools = [];
+            let authConfig = null;
+            let siteData = null;
+            let pendingUrl = null; // Lưu URL đang muốn vào trước khi bị bắt login
+
+            // UI Elements
+            const loginModal = document.getElementById('login-modal');
+            const loginBtnHeader = document.getElementById('login-btn-header');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userBadge = document.getElementById('user-badge-info');
+
+            async function loadData() {
+                try {
+                    const [resUsers, resData] = await Promise.all([
+                        fetch('users.json?v=' + Date.now()),
+                        fetch('data.json?v=' + Date.now())
+                    ]);
+                    
+                    if (!resUsers.ok || !resData.ok) throw new Error('Fetch failed');
+                    authConfig = await resUsers.json();
+                    siteData = await resData.json();
+
+                    document.getElementById('app-title-header').innerText = authConfig.settings.app_name || "Tools Center";
+
+                    checkSession(); // Cập nhật Header UI (Login/Logout)
+                    
+                    allTools = siteData.body || [];
+                    renderNavbar(siteData.header || []);
+                    renderFooter(siteData.footer || {});
+                    renderTools(allTools); // HIỂN THỊ TẤT CẢ TOOL NGAY TỪ ĐẦU
+                } catch (err) {
+                    document.getElementById('tools-container').innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Lỗi tải dữ liệu. Vui lòng mở bằng Web Server (Localhost).</div>`;
+                }
+            }
+
+            // ==========================================
+            // SESSION & LOGIN MODAL
+            // ==========================================
+            function getCurrentUser() {
+                const sessionData = localStorage.getItem('auth_session');
+                if (!sessionData) return null;
+                const session = JSON.parse(sessionData);
+                if (Date.now() > session.expiry) {
+                    localStorage.removeItem('auth_session');
+                    return null;
+                }
+                return session.user;
+            }
+
+            function checkSession() {
+                const user = getCurrentUser();
+                if (user) {
+                    loginBtnHeader.style.display = 'none';
+                    logoutBtn.style.display = 'flex';
+                    userBadge.style.display = 'flex';
+                    userBadge.innerHTML = `<i class="fa fa-user-circle"></i> ${user.username}`;
+                } else {
+                    loginBtnHeader.style.display = 'flex';
+                    logoutBtn.style.display = 'none';
+                    userBadge.style.display = 'none';
+                }
+            }
+
+            function openLoginModal(targetUrl = null) {
+                pendingUrl = targetUrl;
+                loginModal.classList.add('active');
+                document.getElementById('login-error').style.display = 'none';
+            }
+
+            function closeLoginModal() {
+                loginModal.classList.remove('active');
+                pendingUrl = null;
+            }
+
+            loginBtnHeader.addEventListener('click', () => openLoginModal());
+            document.getElementById('close-modal-btn').addEventListener('click', closeLoginModal);
+            
+            // Xử lý Form Login
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const u = document.getElementById('username').value.trim();
+                const p = document.getElementById('password').value.trim();
+                const validUser = authConfig.users.find(user => user.username === u && user.password === p);
+                
+                if (validUser) {
+                    const expiryTime = Date.now() + (authConfig.settings.session_hours * 60 * 60 * 1000);
+                    localStorage.setItem('auth_session', JSON.stringify({ user: validUser, expiry: expiryTime }));
+                    
+                    checkSession(); // Update UI
+                    renderTools(allTools); // Render lại lưới để mở khóa
+                    closeLoginModal();
+                    
+                    // Nếu đăng nhập thành công vì bấm vào tool, chuyển hướng ngay
+                    if (pendingUrl) {
+                        if (checkAccess(validUser, pendingUrl)) {
+                            window.open(pendingUrl, '_blank');
+                        } else {
+                            alert("Tài khoản của bạn không có quyền truy cập công cụ này!");
+                        }
+                        pendingUrl = null;
+                    }
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('auth_session');
+                checkSession();
+                renderTools(allTools); // Gắn khóa lại
+            });
+
+            // ==========================================
+            // LOGIC CLICK BẮT QUYỀN
+            // ==========================================
+            function checkAccess(user, url) {
+                if (!user) return false;
+                if (user.access.tools.includes("*")) return true; // Admin
+                return user.access.tools.includes(url);
+            }
+
+            document.getElementById('tools-container').addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                const url = link.getAttribute('href');
+                const protectedList = authConfig.settings.protected_tools || [];
+                const isProtected = protectedList.includes(url);
+
+                if (isProtected) {
+                    const user = getCurrentUser();
+                    if (!user) {
+                        e.preventDefault();
+                        openLoginModal(url); // Bắt login
+                    } else if (!checkAccess(user, url)) {
+                        e.preventDefault();
+                        alert("Tài khoản của bạn không có quyền truy cập công cụ này!");
+                    }
+                    // Nếu có quyền, tự động cho phép thẻ a nhảy link bình thường
+                }
+            });
+
+            // ==========================================
+            // RENDER UI CHÍNH
+            // ==========================================
+            function renderNavbar(items) {
+                const ul = document.getElementById('dynamic-nav-list');
+                let html = '';
+                items.forEach(item => {
+                    const icon = item.icon ? `<i class="${item.icon}"></i>` : '';
+                    if (item.type === 'link') {
+                        html += `<li><a href="${item.url}" target="${item.target || '_self'}">${icon} ${item.title}</a></li>`;
+                    } else if (item.type === 'dropdown') {
+                        html += `<li><button class="dropdown-toggle-btn">${icon} ${item.title} <i class="fa fa-caret-down"></i></button><ul class="custom-dropdown-menu">`;
+                        item.items.forEach(s => html += `<li><a href="${s.url}" target="${s.target || '_self'}">${s.title}</a></li>`);
+                        html += `</ul></li>`;
+                    }
+                });
+                ul.innerHTML = html;
+            }
+
+            function renderTools(tools) {
+                const protectedList = authConfig?.settings?.protected_tools || [];
+                const user = getCurrentUser();
+
+                document.getElementById('tool-counter').innerHTML = `<i class="fa fa-cubes"></i> Đã tải thành công <b>${tools.length}</b> công cụ`;
+
+                if (!tools.length) {
+                    document.getElementById('tools-container').innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px;">Không tìm thấy công cụ.</div>`;
+                    return;
+                }
+
+                document.getElementById('tools-container').innerHTML = tools.map((t, i) => {
+                    const isProtected = protectedList.includes(t.url);
+                    const hasAccess = user ? checkAccess(user, t.url) : false;
+                    
+                    // Nếu tool bị protect và người dùng không có quyền -> Gắn thẻ Khóa
+                    let lockHtml = '';
+                    if (isProtected && !hasAccess) {
+                        lockHtml = `<div class="lock-badge" title="Yêu cầu đăng nhập có quyền"><i class="fa fa-lock"></i></div>`;
+                    } else if (isProtected && hasAccess) {
+                        lockHtml = `<div class="lock-badge" style="color: #10b981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2);" title="Bạn có quyền truy cập"><i class="fa fa-unlock"></i></div>`;
+                    }
+
+                    return `
+                    <div class="tool-card" style="animation-delay:${Math.min(i * 20, 500)}ms">
+                        ${lockHtml}
+                        <a href="${t.url}" target="${t.target || '_blank'}">
+                            <div class="tool-icon-wrap"><i class="${t.icon}"></i></div>
+                            <span class="tool-name">${t.title}</span>
+                        </a>
+                    </div>`;
+                }).join('');
+            }
+
+            function renderFooter(f) {
+                if (f.social) {
+                    document.getElementById('dynamic-footer-social').innerHTML = f.social.map(s => 
+                        `<li><a href="${s.url}" title="${s.title}" target="${s.target || '_blank'}"><i class="${s.icon}"></i></a></li>`
+                    ).join('');
+                }
+                if (f.copyright) {
+                    document.getElementById('dynamic-copyright').innerHTML = `Copyright © ${new Date().getFullYear()} by <a href="${f.copyright.authorUrl}" target="_blank">${f.copyright.author}</a>`;
+                }
+            }
+
+            document.getElementById('search-input').addEventListener('input', e => {
+                const q = e.target.value.toLowerCase().trim();
+                renderTools(q ? allTools.filter(t => t.title.toLowerCase().includes(q)) : allTools);
+            });
+
+            loadData(); // Khởi chạy
+        })();
+    </script>
+</body>
 </html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <title>Tools Online – Đặng Thành Phát</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <meta charset="UTF-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport' />
+    <meta content='IE=edge' http-equiv='X-UA-Compatible' />
+    <meta content='Đặng Thành Phát' name='Author' />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+    <!-- Google Fonts: Sora (display) + DM Sans (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FIX LỖI ICON: Sử dụng CDN Quốc Tế thay vì file Local -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Thư viện gốc của bạn -->
+    <link rel="stylesheet" type="text/css" href="/dist/bs3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/pace/pace-theme.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/css.css">
+
+    <script src="/dist/jquery.min.js"></script>
+    <script src="/dist/pace/pace.min.js"></script>
+    <script src="/dist/SmoothScroll.min.js"></script>
+    <script src="/dist/bs3/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169293538-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-169293538-1');
+    </script>
+
+    <style>
+        /* ============================================================
+           RESET & MÀU SẮC ĐỘNG (XỊN SÒ HƠN)
+           ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent: #6366f1;
+            --accent-2: #ec4899;
+            --accent-3: #06b6d4;
+            --bg: #09090b;
+            --surface: #111113;
+            --surface-hover: #1c1c1f;
+            --border: rgba(255,255,255,0.08);
+            --text: #ffffff;
+            --text-muted: #a1a1aa;
+            --font-display: 'Sora', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --nav-h: 75px;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --border: rgba(0,0,0,0.08);
+            --text: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body) !important;
+            background: var(--bg) !important;
+            color: var(--text) !important;
+            transition: background 0.3s, color 0.3s;
+            -webkit-user-select: none;
+            user-select: none;
+            padding-top: var(--nav-h); /* Bù chiều cao cho Header cố định */
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; margin: 0; padding: 0; }
+
+        /* ============================================================
+           HEADER HIỆN ĐẠI (Cách ly hoàn toàn khỏi Bootstrap)
+           ============================================================ */
+        .app-header {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        body.light .app-header {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .nav-inner {
+            width: 100%; max-width: 1400px;
+            margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center;
+        }
+
+        .nav-brand {
+            display: flex; align-items: center; gap: 12px;
+            font-family: var(--font-display);
+            font-size: 22px; font-weight: 800;
+            color: var(--text);
+            margin-right: 30px;
+            text-decoration: none !important;
+        }
+
+        .nav-brand-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: #fff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-links {
+            display: flex; align-items: center; gap: 8px; flex: 1;
+        }
+
+        .nav-links li { position: relative; }
+
+        .nav-links a, .nav-links .dropdown-toggle-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 14px; border-radius: 10px;
+            font-size: 14px; font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            cursor: pointer; background: none; border: none;
+            font-family: var(--font-body);
+            text-decoration: none !important;
+        }
+
+        .nav-links a:hover, .nav-links .dropdown-toggle-btn:hover,
+        .nav-links li.open > .dropdown-toggle-btn {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .nav-links a i, .nav-links .dropdown-toggle-btn i {
+            font-size: 16px;
+        }
+
+        /* FIX LỖI DROPDOWN BỊ ẨN: Thiết kế lại Dropdown Menu */
+        .custom-dropdown-menu {
+            display: none; position: absolute; top: calc(100% + 10px); left: 0;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 8px; min-width: 220px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 1100;
+            opacity: 0; transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        body.light .custom-dropdown-menu { box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+
+        .nav-links li.open .custom-dropdown-menu {
+            display: block; opacity: 1; transform: translateY(0);
+        }
+
+        .custom-dropdown-menu li a {
+            display: block; padding: 10px 16px; border-radius: 10px;
+            font-size: 14px; color: var(--text-muted); font-weight: 500;
+        }
+        .custom-dropdown-menu li a:hover {
+            background: var(--surface-hover); color: var(--text);
+            transform: translateX(5px);
+        }
+
+        /* Nút công cụ góc phải */
+        .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+        .nav-icon-btn {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-size: 18px;
+        }
+        .nav-icon-btn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+
+        /* ============================================================
+           HERO & TÌM KIẾM
+           ============================================================ */
+        .hero {
+            padding: 60px 24px 40px; text-align: center; max-width: 800px; margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc; padding: 8px 18px; border-radius: 999px;
+            font-size: 13px; font-weight: 600; margin-bottom: 24px;
+        }
+        body.light .hero-badge { background: rgba(99,102,241,0.1); color: var(--accent); }
+
+        .hero h1 {
+            font-family: var(--font-display); font-size: clamp(36px, 6vw, 60px);
+            font-weight: 800; line-height: 1.2; margin-bottom: 16px;
+            background: linear-gradient(to right, #6366f1, #ec4899, #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .search-wrap { max-width: 600px; margin: 30px auto 20px; position: relative; }
+        .search-wrap .fa-search {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted); font-size: 18px; pointer-events: none;
+        }
+        #search-input {
+            width: 100%; padding: 18px 20px 18px 54px;
+            background: var(--surface); border: 2px solid var(--border);
+            border-radius: 20px; color: var(--text); font-family: var(--font-body);
+            font-size: 16px; font-weight: 500; outline: none; transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        #search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99,102,241,0.2); }
+
+        .counter-row { text-align: center; margin-bottom: 50px; }
+        #tool-counter {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 14px; font-weight: 500; color: var(--text-muted);
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 8px 20px; border-radius: 999px;
+        }
+        #tool-counter b { color: var(--accent); font-size: 16px; }
+
+        /* ============================================================
+           LƯỚI CÔNG CỤ (TOOLS GRID) NHIỀU MÀU SẮC
+           ============================================================ */
+        .tools-section { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; }
+        
+        #tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .tool-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 20px; overflow: hidden; position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0; animation: fadeUp 0.5s ease forwards;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99,102,241,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 2px rgba(99,102,241,0.1);
+        }
+        body.light .tool-card:hover { box-shadow: 0 20px 40px rgba(99,102,241,0.1); }
+
+        .tool-card a {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px 20px; gap: 18px; text-decoration: none !important; min-height: 180px;
+        }
+
+        /* Vòng tròn bọc icon có hiệu ứng Gradient */
+        .tool-icon-wrap {
+            width: 64px; height: 64px; border-radius: 20px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(236,72,153,0.15));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: var(--accent);
+            transition: all 0.4s cubic-bezier(0.34,1.56,.64,1);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .tool-card:hover .tool-icon-wrap {
+            transform: scale(1.2) rotate(8deg);
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(236,72,153,0.3);
+        }
+
+        .tool-name { font-size: 16px; font-weight: 700; color: var(--text); text-align: center; line-height: 1.4; }
+
+        /* Loading */
+        .loading-spinner { grid-column: 1 / -1; padding: 80px 20px; text-align: center; }
+        .spinner-ring {
+            display: inline-block; width: 44px; height: 44px;
+            border: 4px solid var(--border); border-top-color: var(--accent);
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ============================================================
+           FOOTER & NÚT CUỘN TRANG
+           ============================================================ */
+        footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; background: var(--surface); }
+        .footer-socials { display: flex; justify-content: center; gap: 12px; margin-bottom: 24px; }
+        .footer-socials a {
+            width: 44px; height: 44px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 18px; transition: all 0.3s;
+        }
+        .footer-socials a:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-5px); }
+        .footer-copy { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .footer-copy a { color: var(--accent); font-weight: 600; }
+
+        #BackToTop {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-3));
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 20px; cursor: pointer; box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+            opacity: 0; pointer-events: none; transition: all 0.3s; z-index: 900; border: none;
+        }
+        #BackToTop.visible { opacity: 1; pointer-events: all; }
+        #BackToTop:hover { transform: translateY(-5px) scale(1.05); }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="nav-inner">
+            <a class="nav-brand" href="https://thanhphatit.github.io">
+                <div class="nav-brand-icon"><i class="fa fa-gears"></i></div>
+                <span>Tools Center</span>
+            </a>
+
+            <ul class="nav-links" id="dynamic-nav-list">
+                <!-- Javascript sẽ Load Header vào đây -->
+            </ul>
+
+            <div class="nav-right">
+                <button class="nav-icon-btn" id="theme-toggle-btn" title="Giao diện Sáng/Tối">
+                    <i class="fa fa-moon-o" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-badge"><i class="fa fa-rocket"></i> Nhanh chóng & Tiện lợi</div>
+        <h1>Không gian Công cụ<br>Dành cho Lập trình viên</h1>
+        
+        <div class="search-wrap">
+            <i class="fa fa-search"></i>
+            <input type="text" id="search-input" placeholder="Tìm kiếm công cụ... (vd: JSON, Minify, Decode)">
+        </div>
+
+        <div class="counter-row">
+            <div id="tool-counter"><i class="fa fa-cubes"></i> Đang tải dữ liệu...</div>
+        </div>
+    </section>
+
+    <!-- LƯỚI CÔNG CỤ -->
+    <section class="tools-section">
+        <div id="tools-container">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <p>Hệ thống đang nạp dữ liệu từ data.json...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <ul class="footer-socials" id="dynamic-footer-social"></ul>
+        <p class="footer-copy" id="dynamic-copyright"></p>
+    </footer>
+
+    <!-- NÚT LÊN TRÊN -->
+    <button id="BackToTop" title="Lên đầu trang"><i class="fa fa-arrow-up"></i></button>
+
+    <script>
+        (function () {
+            // Chống Copy / F12
+            document.addEventListener("contextmenu", e => e.preventDefault(), false);
+            document.addEventListener("keydown", function (e) {
+                const block = (
+                    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+                    (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) ||
+                    (e.ctrlKey && e.keyCode === 85) || e.keyCode === 123
+                );
+                if (block) { e.stopPropagation(); e.preventDefault(); return false; }
+            }, false);
+
+            // Dark/Light Theme Logic
+            const themeBtn = document.getElementById('theme-toggle-btn');
+            const themeIcon = document.getElementById('theme-icon');
+
+            function applyTheme(mode) {
+                if (mode === 'light') {
+                    document.body.classList.add('light');
+                    themeIcon.className = 'fa fa-sun-o';
+                } else {
+                    document.body.classList.remove('light');
+                    themeIcon.className = 'fa fa-moon-o';
+                }
+            }
+
+            applyTheme(localStorage.getItem('theme') || 'dark');
+            themeBtn.addEventListener('click', () => {
+                const isLight = document.body.classList.contains('light');
+                const next = isLight ? 'dark' : 'light';
+                localStorage.setItem('theme', next);
+                applyTheme(next);
+            });
+
+            // Nút Back To Top
+            const backBtn = document.getElementById('BackToTop');
+            window.addEventListener('scroll', () => {
+                backBtn.classList.toggle('visible', window.scrollY > 300);
+            });
+            backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // Dữ liệu Động
+            const container = document.getElementById('tools-container');
+            const counter = document.getElementById('tool-counter');
+            const searchEl = document.getElementById('search-input');
+            let allTools = [];
+
+            async function init() {
+                try {
+                    const res = await fetch('data.json?v=' + Date.now()); // Ép không lưu cache
+                    if (!res.ok) throw new Error('Fetch failed');
+                    const data = await res.json();
+
+                    renderNavbar(data.header || []);
+                    allTools = data.body || [];
+                    renderTools(allTools);
+                    renderFooter(data.footer || {});
+                } catch (err) {
+                    container.innerHTML = `
+                        <div class="no-results" style="grid-column: 1/-1; padding: 60px 20px; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 20px;">
+                            <i class="fa fa-exclamation-triangle" style="font-size: 40px; color: var(--accent-2); margin-bottom: 20px;"></i>
+                            <h3 style="margin-bottom: 10px; font-weight: 700;">Lỗi kết nối tệp dữ liệu!</h3>
+                            <p style="color: var(--text-muted); font-size: 15px;">Vui lòng mở trang này thông qua <b>Web Server / Localhost</b> để trình duyệt có quyền đọc file <b>data.json</b>.</p>
+                        </div>`;
+                    counter.innerHTML = '<i class="fa fa-times"></i> Không thể nạp dữ liệu';
+                }
+            }
+
+            // Render Header Dropdown chuẩn
+            function renderNavbar(items) {
+                const ul = document.getElementById('dynamic-nav-list');
+                let html = '';
+                items.forEach(item => {
+                    const icon = item.icon ? `<i class="${item.icon}"></i>` : '';
+                    if (item.type === 'link') {
+                        html += `<li><a href="${item.url}" target="${item.target || '_self'}">${icon} ${item.title}</a></li>`;
+                    } else if (item.type === 'dropdown') {
+                        html += `
+                        <li>
+                            <button class="dropdown-toggle-btn">${icon} ${item.title} <i class="fa fa-caret-down" style="font-size:12px; margin-left:4px;"></i></button>
+                            <ul class="custom-dropdown-menu">
+                                ${item.items.map(s => `<li><a href="${s.url}" target="${s.target || '_self'}">${s.title}</a></li>`).join('')}
+                            </ul>
+                        </li>`;
+                    }
+                });
+                ul.innerHTML = html;
+            }
+
+            // Xử lý sự kiện click mở Dropdown
+            document.addEventListener('click', function (e) {
+                const toggle = e.target.closest('.dropdown-toggle-btn');
+                if (toggle) {
+                    e.preventDefault();
+                    const li = toggle.closest('li');
+                    const wasOpen = li.classList.contains('open');
+                    document.querySelectorAll('.nav-links li.open').forEach(x => x.classList.remove('open'));
+                    if (!wasOpen) li.classList.add('open');
+                } else {
+                    document.querySelectorAll('.nav-links li.open').forEach(x => x.classList.remove('open'));
+                }
+            });
+
+            // Render Lưới công cụ Xịn Sò
+            function renderTools(tools) {
+                counter.innerHTML = tools.length
+                    ? `<i class="fa fa-database"></i> Đã tải thành công <b>${tools.length}</b> công cụ`
+                    : `<i class="fa fa-search"></i> Không có kết quả`;
+
+                if (!tools.length) {
+                    container.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                            <i class="fa fa-folder-open-o" style="font-size: 50px; color: var(--text-muted); margin-bottom: 20px;"></i>
+                            <h3 style="font-weight: 600;">Opps! Không tìm thấy công cụ.</h3>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = tools.map((t, i) => `
+                    <div class="tool-card" style="animation-delay:${Math.min(i * 20, 500)}ms">
+                        <a href="${t.url}" target="${t.target || '_blank'}">
+                            <div class="tool-icon-wrap">
+                                <i class="${t.icon}"></i>
+                            </div>
+                            <span class="tool-name">${t.title}</span>
+                        </a>
+                    </div>`).join('');
+            }
+
+            // Render Footer
+            function renderFooter(f) {
+                if (f.social) {
+                    document.getElementById('dynamic-footer-social').innerHTML = f.social.map(s => 
+                        `<li><a href="${s.url}" title="${s.title}" target="${s.target || '_blank'}"><i class="${s.icon}"></i></a></li>`
+                    ).join('');
+                }
+                if (f.copyright) {
+                    document.getElementById('dynamic-copyright').innerHTML = `Copyright © ${new Date().getFullYear()} by <a href="${f.copyright.authorUrl}" target="_blank">${f.copyright.author}</a>`;
+                }
+            }
+
+            // Tìm kiếm siêu tốc
+            searchEl.addEventListener('input', e => {
+                const q = e.target.value.toLowerCase().trim();
+                renderTools(q ? allTools.filter(t => t.title.toLowerCase().includes(q)) : allTools);
+            });
+
+            init();
+        })();
+    </script>
+</body>
+</html>

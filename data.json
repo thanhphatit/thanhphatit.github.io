@@ -1,0 +1,126 @@
+{
+    "header": [
+        { "type": "link", "title": "Jquery Libraries", "icon": "fa fa-book", "url": "https://thanhphatit.github.io/jquery/dist/jquery.min.js", "target": "_blank" },
+        { 
+            "type": "dropdown", 
+            "title": "Bootstrap Libraries", 
+            "icon": "fa fa-pie-chart", 
+            "items": [
+                { "title": "v3", "url": "https://thanhphatit.github.io/bootstrap/3/css/bootstrap.min.css", "target": "_blank" },
+                { "title": "v4", "url": "https://thanhphatit.github.io/bootstrap/4/css/bootstrap.min.css", "target": "_blank" }
+            ] 
+        },
+        { 
+            "type": "dropdown", 
+            "title": "FontAwesome Libraries", 
+            "icon": "fa fa-feed", 
+            "items": [
+                { "title": "v4-ICONS", "url": "https://fontawesome.com/v4/icons/", "target": "_blank" },
+                { "title": "v4", "url": "https://thanhphatit.github.io/font-awesome/4/css/font-awesome.min.css", "target": "_blank" },
+                { "title": "v5", "url": "https://thanhphatit.github.io/font-awesome/5/css/all.min.css", "target": "_blank" }
+            ] 
+        },
+        { 
+            "type": "dropdown", 
+            "title": "Other Libraries", 
+            "icon": "", 
+            "items": [
+                { "title": "Clipboard.js", "url": "https://thanhphatit.github.io/clipboardjs/dist/clipboard.min.js", "target": "_blank" },
+                { "title": "Highlightjs", "url": "https://thanhphatit.github.io/highlightjs/src/highlight.min.js", "target": "_blank" },
+                { "title": "jQuery Timeago", "url": "https://thanhphatit.github.io/jquery-timeago/jquery.timeago.min.js", "target": "_blank" },
+                { "title": "Reading Time", "url": "https://thanhphatit.github.io/reading-time/src/readingTime.min.js", "target": "_blank" },
+                { "title": "Smart Photo", "url": "https://thanhphatit.github.io/smartphoto/js/jquery-smartphoto.min.js", "target": "_blank" }
+            ] 
+        },
+        { "type": "link", "title": "Deployment", "icon": "fa fa-code", "url": "deployment", "target": "_self" },
+        { 
+            "type": "dropdown", 
+            "title": "WZT", 
+            "icon": "", 
+            "items": [
+                { "title": "TechBench Dump", "url": "page/techbench-dump", "target": "_self" },
+                { "title": "MSDN Info", "url": "page/msdn-info", "target": "_self" },
+                { "title": "SHA1 Checksum", "url": "page/sha1-checksum", "target": "_self" },
+                { "title": "UUP Dump", "url": "page/unified-update-platform", "target": "_self" }
+            ] 
+        },
+        { "type": "link", "title": "Contact", "icon": "fa fa-envelope-o", "url": "https://www.itblognote.com", "target": "_self" }
+    ],
+    "body": [
+        { "title": "Paint", "icon": "fa fa-paint-brush", "url": "https://thanhphatit.github.io/paint", "target": "_blank" },
+        { "title": "HTML Beautifier", "icon": "glyphicon glyphicon-signal", "url": "kit/html-beautify", "target": "_blank" },
+        { "title": "JS Beautifier", "icon": "glyphicon glyphicon-leaf", "url": "kit/js-beautifier", "target": "_blank" },
+        { "title": "CSS Beautifier", "icon": "glyphicon glyphicon-cloud", "url": "kit/css-beautify", "target": "_blank" },
+        { "title": "HTML Minifier", "icon": "glyphicon glyphicon-minus-sign", "url": "kit/html-minifier", "target": "_blank" },
+        { "title": "JS Minifier", "icon": "glyphicon glyphicon-tint", "url": "kit/js-minify", "target": "_blank" },
+        { "title": "CSS Minifier", "icon": "glyphicon glyphicon-star", "url": "kit/css-minifier", "target": "_blank" },
+        { "title": "HTML Converter", "icon": "glyphicon glyphicon-share-alt", "url": "kit/html-converter", "target": "_blank" },
+        { "title": "JSON Beautifier", "icon": "glyphicon glyphicon-record", "url": "kit/json-beautify", "target": "_blank" },
+        { "title": "JSON Minifier", "icon": "glyphicon glyphicon-download-alt", "url": "kit/json-minify", "target": "_blank" },
+        { "title": "HTML Unescape", "icon": "glyphicon glyphicon-list", "url": "kit/html-unescape", "target": "_blank" },
+        { "title": "JSON Validate", "icon": "glyphicon glyphicon-ok", "url": "kit/json-validate", "target": "_blank" },
+        { "title": "JSON Escape", "icon": "glyphicon glyphicon-eject", "url": "kit/json-escape", "target": "_blank" },
+        { "title": "JSON Unescape", "icon": "glyphicon glyphicon-zoom-in", "url": "kit/json-unescape", "target": "_blank" },
+        { "title": "XML Beautifier", "icon": "glyphicon glyphicon-object-align-bottom", "url": "kit/xml-beautify", "target": "_blank" },
+        { "title": "XML Minifier", "icon": "glyphicon glyphicon-minus", "url": "kit/xml-minify", "target": "_blank" },
+        { "title": "Image to Base64", "icon": "glyphicon glyphicon-book", "url": "kit/image-to-base64", "target": "_blank" },
+        { "title": "Viết chữ ngược", "icon": "glyphicon glyphicon-download", "url": "kit/viet-chu-nguoc", "target": "_blank" },
+        { "title": "chữ thường > CHỮ HOA", "icon": "glyphicon glyphicon-refresh", "url": "kit/chu-thuong-chu-hoa", "target": "_blank" },
+        { "title": "CHỮ HOA > chữ thường", "icon": "glyphicon glyphicon-refresh", "url": "kit/chu-hoa-chu-thuong", "target": "_blank" },
+        { "title": "Xóa dấu Tiếng Việt", "icon": "glyphicon glyphicon-remove-circle", "url": "kit/xoa-dau-tieng-viet", "target": "_blank" },
+        { "title": "Remove Line Breaks", "icon": "glyphicon glyphicon-remove-sign", "url": "kit/remove-line-breaks", "target": "_blank" },
+        { "title": "Random Sentences", "icon": "glyphicon glyphicon-grain", "url": "kit/random-sentences", "target": "_blank" },
+        { "title": "Base64 Converter", "icon": "glyphicon glyphicon-stop", "url": "kit/base64-converter", "target": "_blank" },
+        { "title": "Email HTML Code", "icon": "glyphicon glyphicon-envelope", "url": "kit/email-html-code", "target": "_blank" },
+        { "title": "Encode URL", "icon": "glyphicon glyphicon-resize-horizontal", "url": "kit/encode-url", "target": "_blank" },
+        { "title": "Random Password Generator", "icon": "glyphicon glyphicon-lock", "url": "kit/random-password-generator", "target": "_blank" },
+        { "title": "FontAwesome", "icon": "glyphicon glyphicon-flag", "url": "kit/fontawesome-4-7-cheatsheet", "target": "_blank" },
+        { "title": "Heart Maker", "icon": "glyphicon glyphicon-heart", "url": "kit/heart-maker", "target": "_blank" },
+        { "title": "Upload Image", "icon": "glyphicon glyphicon-picture", "url": "kit/upload-images", "target": "_blank" },
+        { "title": "Direct Link Generator", "icon": "glyphicon glyphicon-cog", "url": "kit/direct-link-generator", "target": "_blank" },
+        { "title": "Color Picker", "icon": "glyphicon glyphicon-send", "url": "/kit/color-picker", "target": "_blank" },
+        { "title": "JS Obfuscator", "icon": "glyphicon glyphicon-qrcode", "url": "kit/javascript-obfuscator", "target": "_blank" },
+        { "title": "Random JSON", "icon": "glyphicon glyphicon-move", "url": "kit/random-json", "target": "_blank" },
+        { "title": "Random XML", "icon": "glyphicon glyphicon-fire", "url": "kit/random-xml", "target": "_blank" },
+        { "title": "Binary Converter", "icon": "fa fa-cube", "url": "kit/binary-converter", "target": "_blank" },
+        { "title": "Box Shadow Generator", "icon": "fa fa-book", "url": "kit/box-shadow", "target": "_blank" },
+        { "title": "Character Counter", "icon": "fa fa-indent", "url": "kit/character-counter", "target": "_blank" },
+        { "title": "Color Converter", "icon": "fa fa-mouse-pointer", "url": "kit/color-converter", "target": "_blank" },
+        { "title": "Share link", "icon": "fa fa-link", "url": "kit/share-link", "target": "_blank" },
+        { "title": "RawGit", "icon": "fa fa-github", "url": "kit/rawgit", "target": "_blank" },
+        { "title": "Staticaly", "icon": "fa fa-github", "url": "kit/staticaly", "target": "_blank" },
+        { "title": "Download Tools", "icon": "fa fa-download", "url": "kit/download-tools", "target": "_blank" },
+        { "title": "QR Code", "icon": "fa fa-qrcode", "url": "kit/qrcode", "target": "_blank" },
+        { "title": "Encrypt/Decrypt", "icon": "fa fa-lock", "url": "codec", "target": "_blank" },
+        { "title": "Encrypt TPIT Symmetry", "icon": "fa fa-user-secret", "url": "kit/tpit-symmetry", "target": "_blank" },
+        { "title": "Compress Images", "icon": "fa fa-image", "url": "compress-images", "target": "_blank" },
+        { "title": "Draw IO", "icon": "fa fa-pencil", "url": "draw-diagrams", "target": "_blank" },
+        { "title": "Crontab", "icon": "fa fa-calendar-times-o", "url": "crontab-guru", "target": "_blank" },
+        { "title": "Editor MD", "icon": "fa fa-pencil-square-o", "url": "editor.md/en", "target": "_blank" },
+        { "title": "Random Password Generator", "icon": "fa fa-key", "url": "random-password-generator/", "target": "_blank" },
+        { "title": "CyberChef", "icon": "fa fa-code", "url": "cyberchef/", "target": "_blank" },
+        { "title": "Case Converter", "icon": "glyphicon glyphicon-refresh", "url": "kit/case-converter/", "target": "_blank" },
+        { "title": "Random Picker", "icon": "fa fa-random", "url": "kit/random-picker/", "target": "_blank" },
+        { "title": "Vietnam Address", "icon": "fa fa-map-marker", "url": "vietnam-address/", "target": "_blank" },
+        { "title": "Image Resizer", "icon": "fa fa-arrows", "url": "image-resizer/", "target": "_blank" },
+        { "title": "Auto Shift", "icon": "fa fa-calendar-check-o", "url": "kit/auto-shift/", "target": "_blank" },
+        { "title": "Pixel Voice", "icon": "fa fa-file-image-o", "url": "kit/pixelvoice/", "target": "_blank" }
+    ],
+    "footer": {
+        "social": [
+            { "title": "Twitter", "icon": "fa fa-twitter", "url": "https://twitter.com/thanhphatit", "target": "_blank" },
+            { "title": "Facebook", "icon": "fa fa-facebook", "url": "https://www.facebook.com/YukiThanhPhat/", "target": "_blank" },
+            { "title": "Instagram", "icon": "fa fa-instagram", "url": "https://www.instagram.com/zyukiz/", "target": "_blank" },
+            { "title": "Youtube", "icon": "fa fa-youtube", "url": "https://www.youtube.com/channel/UCTTPkH5yI_B5Hr1u8030w3A?view_as=subscriber", "target": "_blank" }
+        ],
+        "copyright": {
+            "prefix": "Copyright ©",
+            "author": "THANHPHAT-IT",
+            "authorUrl": "https://www.itblognote.com/"
+        },
+        "floatingButtons": [
+            { "id": "analytics", "icon": "fa fa-bar-chart-o", "title": "Google Analytics", "url": "page/analytics.html", "target": "_self" },
+            { "id": "BackToTop", "icon": "fa fa-angle-up", "title": "Cuộn lên đầu trang", "url": "", "target": "_self" }
+        ]
+    }
+}
