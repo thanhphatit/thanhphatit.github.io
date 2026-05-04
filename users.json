@@ -17,14 +17,14 @@
             "username": "admin",
             "password": "Admin@2026",
             "role": "admin",
-            "name": "Quản trị viên",
+            "name": "Administrator",
             "access": { "tools": ["*"] }
         },
         {
             "username": "dev.team",
             "password": "Dev@2026",
             "role": "dev",
-            "name": "Nhóm Lập trình",
+            "name": "Developer",
             "access": {
                 "tools": [
                     "kit/random-password-generator",
