@@ -3,14 +3,21 @@
         "session_hours": 8,
         "app_name": "Tools",
         "protected_tools": [
-            "kit/random-password-generator",
-            "cyberchef/",
-            "codec"
+            "*"
+            // "kit/random-password-generator",
+            // "cyberchef/",
+            // "codec"
         ]
     },
     "roles": {
-        "admin": { "label": "Administrator", "description": "Full access to everything" },
-        "dev": { "label": "Developer", "description": "Access to specific tools" }
+        "admin": {
+            "label": "Administrator",
+            "description": "Full access to everything"
+        },
+        "dev": {
+            "label": "Developer",
+            "description": "Access to specific tools"
+        }
     },
     "users": [
         {
@@ -18,7 +25,11 @@
             "password": "Admin@2026",
             "role": "admin",
             "name": "Administrator",
-            "access": { "tools": ["*"] }
+            "access": {
+                "tools": [
+                    "*"
+                ]
+            }
         },
         {
             "username": "dev.team",
